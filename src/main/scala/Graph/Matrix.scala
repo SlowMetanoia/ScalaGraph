@@ -19,12 +19,12 @@ case class Matrix[T](matrix: Seq[Seq[T]]){
   def col(j: Int): Seq[T] = matrix.map(_(j))
 
   /**
-   * matrix(i)(j) = j элемент в i строке
+   * matrix( i )( j ) = j элемент в i строке
    */
   def apply(i: Int): Seq[T] = matrix(i)
 
   /**
-   * matrix(i,j) = j элемент в i строке
+   * matrix( i , j ) = j элемент в i строке
    */
   def apply(i: Int,j:Int): T = matrix(i)(j)
 }
