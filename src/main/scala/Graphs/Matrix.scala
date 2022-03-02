@@ -1,4 +1,4 @@
-package Graph
+package Graphs
 
 /**
  * Матрица
@@ -27,4 +27,6 @@ case class Matrix[T](matrix: Seq[Seq[T]]){
    * matrix( i , j ) = j элемент в i строке
    */
   def apply(i: Int,j:Int): T = matrix(i)(j)
+
+  def size: (Int, Int) = (matrix.length,matrix.head.length)
 }

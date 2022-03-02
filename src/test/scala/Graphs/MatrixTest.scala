@@ -1,4 +1,4 @@
-package Graph
+package Graphs
 
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should

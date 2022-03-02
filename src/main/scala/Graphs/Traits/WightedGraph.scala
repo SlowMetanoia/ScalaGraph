@@ -1,4 +1,4 @@
-package Graph.Traits
+package Graphs.Traits
 
 /**
  * Трейт для любых взвешенных графов - графов для рёбер которых определён вес.

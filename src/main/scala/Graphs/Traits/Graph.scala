@@ -1,32 +1,41 @@
-package Graph.Traits
+package Graphs.Traits
 
-import Graph.Matrix
+import Graphs.Matrix
 
 /**
  *
  * @tparam StoredType тип хранимого значения
  */
 trait Graph[StoredType] {
+
   /**
    * @param i номер вершины
    * @return соседей i-той вершины
    */
-  def getNeighbours(i: Int): Seq[StoredType]
+  def getNeighbours(i: Int): Seq[Int]
 
   /**
    * @param source номер 1-ой вершины
    * @param receiver номер 2-ой вершины
-   * @return true если существует ребро между i и j иначе false
+   * @return true если существует ребро между source и receiver иначе false
    */
   def hasEdge(source: Int, receiver: Int): StoredType
 
   /**
-   * @return Матрица инцидентности графа
+   * Рёбра/дуги графа
+   * @return последовательность всех рёбер графа
+   */
+  def edges:Seq[(Int,Int)]
+
+  /**
+   * Матрица инцидентности графа
+   * @return Матрица, где по индексам (i,j) лежит true, если i-тому ребру инцидентна j-ая вершина
    */
   def incidenceMatrix: Matrix[StoredType]
 
   /**
-   * @return Матрица смежности графа
+   * Матрица смежности графа
+   * @return Матрица, где по индексам (i,j) лежит true, если существует ребро из i в j
    */
   def adjacencyMatrix: Matrix[StoredType]
 
@@ -38,7 +47,8 @@ trait Graph[StoredType] {
   def isAvailable(source: Int, receiver: Int): Boolean
 
   /**
-   * @return Матрица доступности
+   * Матрица доступности
+   * @return Матрица, где по индексам (i,j) лежит true, если существует путь из i в j
    */
   def availabilityMatrix: Matrix[Boolean]
 
@@ -57,7 +67,7 @@ trait Graph[StoredType] {
   /**
    * Разбиение графа на связные (сильно-связные) части
    *
-   * @return последовательность свзяных частей графа
+   * @return последовательность связных частей графа
    */
   def connectedParts: Seq[Graph[StoredType]]
 
