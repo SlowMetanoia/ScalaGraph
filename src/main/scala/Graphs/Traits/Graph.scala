@@ -69,7 +69,7 @@ trait Graph[StoredType] {
    *
    * @return последовательность связных частей графа
    */
-  def connectedParts: Seq[Graph[StoredType]]
+  def connectedParts: Seq[Seq[Int]]
 
   /**
    * Путь минимальной длинны
@@ -78,4 +78,11 @@ trait Graph[StoredType] {
    * @return Путь минимальной длинны из источника в приёмник, если такой путь существует.
    */
   def minimumLengthPath(source:Int,receiver:Int):Option[Seq[Int]]
+
+  /**
+   * Подграф.
+   * @param nodes набор вершин для генерации подграфа
+   * @return Подграф из выбранных вершин и всех рёбер между ними.
+   */
+  def subgraph(nodes:Seq[Int]):Graph[StoredType]
 }
