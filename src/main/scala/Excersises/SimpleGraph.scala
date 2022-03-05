@@ -56,7 +56,8 @@ case class SimpleGraph(adjacencyMatrix:Matrix[Boolean]) extends Graph[Boolean]{
     //инициализация матрицы явно?
     Matrix(
       edges.map{e=>
-        for(i<-adjacencyMatrix.row(0).indices) yield (e._1 == i) || (e._2 == i)
+        for(i<-adjacencyMatrix.row(0).indices) yield
+          (e._1 == i) || (e._2 == i)
       }
     )
   }
@@ -109,6 +110,7 @@ case class SimpleGraph(adjacencyMatrix:Matrix[Boolean]) extends Graph[Boolean]{
     //не учитывает специфику конкретных условий
     var result = Seq.empty[Seq[Int]]
     var nodeSet = adjacencyMatrix.row(0).indices.toSet
+
     @tailrec
     def reducePart(knownConnected:Set[Int]):Set[Int] = {
       val newConnected = knownConnected.flatMap(a => getNeighbours(a)) & knownConnected
