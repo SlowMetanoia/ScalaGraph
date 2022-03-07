@@ -4,7 +4,6 @@ import Graphs.Matrix
 import Graphs.Traits.Graph
 
 import scala.Array.ofDim
-import scala.annotation.tailrec
 
 case class SimpleGraph(adjacencyMatrix:Matrix[Boolean]) extends Graph[Boolean]{
 
@@ -103,7 +102,7 @@ case class SimpleGraph(adjacencyMatrix:Matrix[Boolean]) extends Graph[Boolean]{
    *
    * @return последовательность связных частей графа
    */
-  override def connectedParts: Seq[Seq[Int]] = {
+  override def connectedParts: Seq[Seq[Int]] = ???/*{
     //Это императивное решение!
     //плохо оптимизировано
     //негибкое
@@ -115,7 +114,7 @@ case class SimpleGraph(adjacencyMatrix:Matrix[Boolean]) extends Graph[Boolean]{
     def reducePart(knownConnected:Set[Int]):Set[Int] = {
       val newConnected = knownConnected.flatMap(a => getNeighbours(a)) & knownConnected
       if (newConnected.isEmpty) {
-        nodeSet -= knownConnected
+        nodeSet --= knownConnected
         knownConnected
       } else
         reducePart(newConnected)
@@ -127,7 +126,7 @@ case class SimpleGraph(adjacencyMatrix:Matrix[Boolean]) extends Graph[Boolean]{
       )
     }
   result
-  }
+  }*/
 
   /**
    * Путь минимальной длинны

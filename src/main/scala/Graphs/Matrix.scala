@@ -17,6 +17,7 @@ case class Matrix[T](matrix: Seq[Seq[T]]){
   lazy val indices: (Seq[Int], Seq[Int]) =
     if(matrix.nonEmpty) (matrix.indices,matrix.head.indices) else (Seq.empty[Int],Seq.empty[Int])
 
+  override def toString: String = super.toString
   /**
    * @param i номер строки
    * @return строку матрицы
@@ -62,7 +63,7 @@ case class Matrix[T](matrix: Seq[Seq[T]]){
    * foreach обыкновенный
    * @param f функция потребляющая T
    */
-  def foreach(f:T=>()):Unit = matrix.foreach(_.foreach(a=>f(a)))
+  def foreach(f:T=>Unit):Unit = matrix.foreach(_.foreach(a=>f(a)))
 
   /**
    * foreach с индексами
@@ -70,7 +71,7 @@ case class Matrix[T](matrix: Seq[Seq[T]]){
    * аналогично map с индексами
    * @param f функция, потребляющая индексы и T
    */
-  def foreachWithIndices(f:Int=>Int=>T=>()):Unit = for{
+  def foreachWithIndices(f:Int=>Int=>T=>Unit):Unit = for{
     i<-indices._1
     j<-indices._2
   } f(i)(j)(matrix(i)(j))
@@ -78,11 +79,15 @@ case class Matrix[T](matrix: Seq[Seq[T]]){
   /**
    * @param printable что именно мы хотим вывести
    */
-  def prints(printable:Printable): Unit ={
-    case Matrix =>
+  def prints(printable:Printable): Unit = printable match {
+    case Matrix.Indices =>
+      println(
+        s"vertical:   " + indices._1.mkString(" ") + "\n" +
+        s"horizontal: " + indices._2.mkString(" ")
+      )
+    case Matrix.Matrix =>
+    case _=>
   }
-
-
 }
 
 object Matrix{
@@ -92,5 +97,4 @@ object Matrix{
   sealed trait Printable
   case object Indices extends Printable
   case object Matrix extends Printable
-
 }

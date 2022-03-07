@@ -11,6 +11,14 @@ class MatrixTest extends AnyFlatSpec with should.Matchers {
       Seq(9,10,11,12)
     )
   )
+  val testBoolMatrix: Matrix[Boolean] = Matrix(
+    Seq(
+      Seq(false,true,true,false),
+      Seq(true,false,true,true),
+      Seq(true,true,false,true),
+      Seq(false,true,true,false)
+    )
+  )
   "row(i)" should "return row with i index" in {
     testMatrix.row(0) should be(Seq(1,2,3,4))
     testMatrix.row(2) should be(Seq(9,10,11,12))
@@ -25,4 +33,15 @@ class MatrixTest extends AnyFlatSpec with should.Matchers {
   "apply(i,j)" should "return i,j matrix element" in {
     testMatrix.apply(0,1) should be(2)
   }
+
+
+  "prints Matrix" should "print it, lol" in{
+    {
+      import Matrix._
+      testMatrix prints Matrix
+
+      testBoolMatrix prints Matrix
+    }
+  }
+
 }
