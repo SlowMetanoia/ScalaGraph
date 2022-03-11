@@ -1,12 +1,14 @@
 package Graphs
 
+import Printers.Printable
+
 /**
  * Матрица
+ *
  * @param matrix - передаваемые значения
  * @tparam T тип
  */
-case class Matrix[T](matrix: Seq[Seq[T]]){
-  import Matrix.Printable
+case class Matrix[T](matrix: Seq[Seq[T]]) extends Printable[Matrix[String]]{
   /**
    * Размеры матрицы
    */
@@ -17,7 +19,13 @@ case class Matrix[T](matrix: Seq[Seq[T]]){
   lazy val indices: (Seq[Int], Seq[Int]) =
     if(matrix.nonEmpty) (matrix.indices,matrix.head.indices) else (Seq.empty[Int],Seq.empty[Int])
 
-  override def toString: String = super.toString
+  def printConversion: Matrix[String] = Matrix {
+    matrix.view.map(_.map(_.toString))
+      .zipWithIndex.map(line => line._1.prepended(line._2.toString))
+      .toSeq.prepended(
+      indices._2.map(_.toString).prepended(""))
+  }
+
   /**
    * @param i номер строки
    * @return строку матрицы
@@ -75,19 +83,7 @@ case class Matrix[T](matrix: Seq[Seq[T]]){
     i<-indices._1
     j<-indices._2
   } f(i)(j)(matrix(i)(j))
-
-  /**
-   * @param printable что именно мы хотим вывести
-   */
-  def prints(printable:Printable): Unit = printable match {
-    case Matrix.Indices =>
-      println(
-        s"vertical:   " + indices._1.mkString(" ") + "\n" +
-        s"horizontal: " + indices._2.mkString(" ")
-      )
-    case Matrix.Matrix =>
-    case _=>
-  }
+  def flatten: Seq[T] = matrix.flatten
 }
 
 object Matrix{

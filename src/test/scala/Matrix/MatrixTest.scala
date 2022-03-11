@@ -1,5 +1,6 @@
-package Graphs
+package Matrix
 
+import Graphs.Matrix
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
 
@@ -36,12 +37,7 @@ class MatrixTest extends AnyFlatSpec with should.Matchers {
 
 
   "prints Matrix" should "print it, lol" in{
-    {
-      import Matrix._
-      testMatrix prints Matrix
 
-      testBoolMatrix prints Matrix
-    }
   }
 
 }
