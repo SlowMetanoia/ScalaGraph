@@ -9,6 +9,12 @@ import Printers.Printable
  * @tparam T тип
  */
 case class Matrix[T](matrix: Seq[Seq[T]]) extends Printable[Matrix[String]]{
+  //технически эта ерунда работает за n, что печально, если захочется создавать много больших матриц, но только это даёт безопасно использовать indices
+    //matrix.headOption.foreach {
+    //  head => if (matrix.map(_.length == head.length).reduce(_ & _))
+    //    throw new Matrix.NotEqualLineLengthException
+    //}
+
   /**
    * Размеры матрицы
    */
@@ -93,4 +99,5 @@ object Matrix{
   sealed trait Printable
   case object Indices extends Printable
   case object Matrix extends Printable
+  class NotEqualLineLengthException extends Exception
 }

@@ -4,6 +4,8 @@ import Graphs.Matrix
 import Graphs.Traits.Graph
 
 import scala.Array.ofDim
+import scala.collection.mutable
+
 
 case class SimpleGraph(adjacencyMatrix:Matrix[Boolean]) extends Graph[Boolean]{
 
@@ -144,4 +146,97 @@ case class SimpleGraph(adjacencyMatrix:Matrix[Boolean]) extends Graph[Boolean]{
    * @return Подграф из выбранных вершин и всех рёбер между ними.
    */
   override def subgraph(nodes: Seq[Int]): Graph[Boolean] = ???
+
+  /**
+   * out:
+   * Set
+   * Seq
+   * Unit
+   * Graph
+   * Tree
+   * iterator
+   *
+   * n
+   * O(nlogn)
+   *
+   * @return
+   */
+  def bfs0(node:Int):Set[Int] = {
+
+    var nodesNotDone:Set[Int] = adjacencyMatrix.indices._1.toSet
+    var shell:Set[Int] = Set(node)
+    var result:Set[Int] = Set.empty
+
+    while(shell.nonEmpty){
+      println(shell.mkString(" "))
+      nodesNotDone --= shell
+      shell = shell.flatMap(node => getNeighbours(node).toSet & nodesNotDone)
+      result ++= shell
+    }
+    result
+  }
+
+  def bfs1(node:Int):Seq[Set[Int]] = {
+    var nodesNotDone:Set[Int] = adjacencyMatrix.indices._1.toSet
+    var shell:Set[Int] = Set(node)
+    var result:Seq[Set[Int]] = Seq.empty
+
+    while(shell.nonEmpty){
+      nodesNotDone --= shell
+      shell = shell.flatMap(node => getNeighbours(node).toSet & nodesNotDone)
+      result = result.appended(shell)
+    }
+    result
+  }
+
+  def dfs(node:Int):List[Int] = {
+    var nodesNotDone:Set[Int] = adjacencyMatrix.indices._1.toSet
+    var currentNode:Int = node
+    val visitingQueue:mutable.Queue[Int] = mutable.Queue(node)
+    val result:mutable.Queue[Int] = mutable.Queue.empty
+
+    def step():Unit = {
+      var newNodes = getNeighbours(currentNode).toSet & nodesNotDone
+      nodesNotDone --= newNodes
+      visitingQueue.enqueueAll(newNodes)
+      result.enqueueAll(newNodes)
+      currentNode = visitingQueue.dequeue()
+    }
+
+    do step() while(visitingQueue.nonEmpty)
+
+    result.toList
+  }
+
+  /**
+   * Степень вершины
+   *
+   * @param i номер вершины
+   * @return количество рёбер инцидентных вершине (начинающихся либо заканчивающихся в вершине)
+   */
+  override def degrees(i: Int): Int = ???
+
+  /**
+   * Граф с новыми рёбрами
+   *
+   * @param f Правило построения ребра
+   * @return Граф с рёбрами, соответствующими правилу построения
+   */
+  override def newEdgesGraph(f: Int => Int => Boolean): Graph[Boolean] = ???
+}
+
+object SimpleGraph extends App{
+  println(SimpleGraph {
+    Matrix(
+      Seq(
+        Seq(false, true, true, false, false, false, true),
+        Seq(true, false, true, true, false, false, false),
+        Seq(true, true, false, false, false, false, false),
+        Seq(false, true, false, false, true, false, false),
+        Seq(false, false, false, true, false, true, false),
+        Seq(false, false, false, false, true, false, true),
+        Seq(true, false, false, false, false, true, false)
+      )
+    )
+  }.dfs(0).mkString(" "))
 }
