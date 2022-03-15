@@ -168,7 +168,6 @@ case class SimpleGraph(adjacencyMatrix:Matrix[Boolean]) extends Graph[Boolean]{
     var result:Set[Int] = Set.empty
 
     while(shell.nonEmpty){
-      println(shell.mkString(" "))
       nodesNotDone --= shell
       shell = shell.flatMap(node => getNeighbours(node).toSet & nodesNotDone)
       result ++= shell
@@ -177,6 +176,7 @@ case class SimpleGraph(adjacencyMatrix:Matrix[Boolean]) extends Graph[Boolean]{
   }
 
   def bfs1(node:Int):Seq[Set[Int]] = {
+
     var nodesNotDone:Set[Int] = adjacencyMatrix.indices._1.toSet
     var shell:Set[Int] = Set(node)
     var result:Seq[Set[Int]] = Seq.empty

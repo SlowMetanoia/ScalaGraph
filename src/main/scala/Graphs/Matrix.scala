@@ -100,4 +100,8 @@ object Matrix{
   case object Indices extends Printable
   case object Matrix extends Printable
   class NotEqualLineLengthException extends Exception
+
+  def empty[T]:Matrix[T] = new Matrix(
+    Seq.empty[Seq[T]]
+  )
 }
