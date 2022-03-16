@@ -1,6 +1,6 @@
 package Graphs.Traits
 
-import Graphs.Matrix
+import Graphs.Matrix.RectangleMatrix
 
 /**
  *
@@ -38,13 +38,13 @@ trait Graph[StoredType] {
    * Матрица инцидентности графа
    * @return Матрица, где по индексам (i,j) лежит true, если i-тому ребру инцидентна j-ая вершина
    */
-  def incidenceMatrix: Matrix[StoredType]
+  def incidenceMatrix: RectangleMatrix[StoredType]
 
   /**
    * Матрица смежности графа
    * @return Матрица, где по индексам (i,j) лежит true, если существует ребро из i в j
    */
-  def adjacencyMatrix: Matrix[StoredType]
+  def adjacencyMatrix: RectangleMatrix[StoredType]
 
   /**
    * @param source   номер вершины-источника
@@ -57,7 +57,7 @@ trait Graph[StoredType] {
    * Матрица доступности
    * @return Матрица, где по индексам (i,j) лежит true, если существует путь из i в j
    */
-  def availabilityMatrix: Matrix[Boolean]
+  def availabilityMatrix: RectangleMatrix[Boolean]
 
   /**
    * Связным (сильно-связным для ориентированных графов) является граф, для которого верно,

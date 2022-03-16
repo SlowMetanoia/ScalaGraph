@@ -1,7 +1,7 @@
 package Mappers
 
 import Excersises.SimpleGraph
-import Graphs.Matrix
+import Graphs.Matrix.RectangleMatrix
 
 object InnerMapper {
   def toSimpleGraph[T](coll:Iterable[T])(edgeRule:(T,T)=>Boolean):(Excersises.SimpleGraph,Map[T,Int],Map[Int,T]) = {
@@ -9,7 +9,7 @@ object InnerMapper {
     val mapInt2T = for((k,v)<-mapT2Int) yield (v,k)
     (
       SimpleGraph(
-        Matrix(
+        RectangleMatrix(
           (0 to coll.size).map(i=> (0 to coll.size).map{ j =>
             edgeRule(mapInt2T(i), mapInt2T(j))
           }

@@ -1,18 +1,18 @@
 package Excersises
 
-import Graphs.Matrix
+import Graphs.Matrix.RectangleMatrix
 import Graphs.Traits.Graph
 
 import scala.Array.ofDim
 import scala.collection.mutable
 
 
-case class SimpleGraph(adjacencyMatrix:Matrix[Boolean]) extends Graph[Boolean]{
+case class SimpleGraph(adjacencyMatrix:RectangleMatrix[Boolean]) extends Graph[Boolean]{
 
 
   def this(nodeNumber:Int,edges:Seq[(Int,Int)]){
     this(
-      Matrix(
+      RectangleMatrix(
         {
           val arr = ofDim[Boolean](nodeNumber,nodeNumber)
           //по-умолчанию инициализируется false
@@ -51,11 +51,11 @@ case class SimpleGraph(adjacencyMatrix:Matrix[Boolean]) extends Graph[Boolean]{
    * Матрица инцидентности графа
    * @return Матрица инцидентности графа
    */
-  override def incidenceMatrix: Matrix[Boolean] = {
+  override def incidenceMatrix: RectangleMatrix[Boolean] = {
     //это паршиво написанный код, путь и достаточно функционально.
     //ужас в for!
     //инициализация матрицы явно?
-    Matrix(
+    RectangleMatrix(
       edges.map{e=>
         for(i<-adjacencyMatrix.row(0).indices) yield
           (e._1 == i) || (e._2 == i)
@@ -73,10 +73,10 @@ case class SimpleGraph(adjacencyMatrix:Matrix[Boolean]) extends Graph[Boolean]{
   /**
    * @return Матрица доступности
    */
-  override def availabilityMatrix: Matrix[Boolean] = {
+  override def availabilityMatrix: RectangleMatrix[Boolean] = {
     //функционально, но очень неэффективно!
     val connectedParts = this.connectedParts
-    Matrix(
+    RectangleMatrix(
     for (i<-adjacencyMatrix.row(0).indices) yield
       for (j<-adjacencyMatrix.col(0).indices) yield
         adjacencyMatrix(i,j) || {
@@ -227,7 +227,7 @@ case class SimpleGraph(adjacencyMatrix:Matrix[Boolean]) extends Graph[Boolean]{
 
 object SimpleGraph extends App{
   println(SimpleGraph {
-    Matrix(
+    RectangleMatrix(
       Seq(
         Seq(false, true, true, false, false, false, true),
         Seq(true, false, true, true, false, false, false),

@@ -1,10 +1,10 @@
-import Graphs.Matrix
+import Graphs.Matrix.RectangleMatrix
 
 package object Printers {
   object matrixConsolePrinter{
-    def <<:[T](matrix:Matrix[T]):Unit = printMatrix(matrix.printConversion)
+    def <<:[T](matrix:RectangleMatrix[T]):Unit = printMatrix(matrix.printConversion)
 
-    private def printMatrix(matrix: Matrix[String]): Unit ={
+    private def printMatrix(matrix: RectangleMatrix[String]): Unit ={
       val width = matrix.matrix.map(_.map(_.length).max).max
       println(matrix.map{
         str => str + {

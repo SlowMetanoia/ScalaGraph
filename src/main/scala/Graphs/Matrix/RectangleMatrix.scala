@@ -1,5 +1,6 @@
-package Graphs
+package Graphs.Matrix
 
+import Graphs.Traits.Matrix
 import Printers.Printable
 
 /**
@@ -8,7 +9,7 @@ import Printers.Printable
  * @param matrix - передаваемые значения
  * @tparam T тип
  */
-case class Matrix[T](matrix: Seq[Seq[T]]) extends Printable[Matrix[String]]{
+case class RectangleMatrix[T](matrix: Seq[Seq[T]]) extends Printable[RectangleMatrix[String]] with Matrix[T]{
   //технически эта ерунда работает за n, что печально, если захочется создавать много больших матриц, но только это даёт безопасно использовать indices
     //matrix.headOption.foreach {
     //  head => if (matrix.map(_.length == head.length).reduce(_ & _))
@@ -25,7 +26,7 @@ case class Matrix[T](matrix: Seq[Seq[T]]) extends Printable[Matrix[String]]{
   lazy val indices: (Seq[Int], Seq[Int]) =
     if(matrix.nonEmpty) (matrix.indices,matrix.head.indices) else (Seq.empty[Int],Seq.empty[Int])
 
-  def printConversion: Matrix[String] = Matrix {
+  def printConversion: RectangleMatrix[String] = RectangleMatrix {
     matrix.view.map(_.map(_.toString))
       .zipWithIndex.map(line => line._1.prepended(line._2.toString))
       .toSeq.prepended(
@@ -60,7 +61,7 @@ case class Matrix[T](matrix: Seq[Seq[T]]) extends Printable[Matrix[String]]{
    * @tparam T2 тип возвращаемого значения.
    * @return Матрица с новыми значениями
    */
-  def map[T2](f:T=>T2):Matrix[T2] = Matrix(matrix.map(_.map(a=>f(a))))
+  def map[T2](f:T=>T2):RectangleMatrix[T2] = RectangleMatrix(matrix.map(_.map(a=>f(a))))
 
   /**
    * map с индексами
@@ -68,7 +69,7 @@ case class Matrix[T](matrix: Seq[Seq[T]]) extends Printable[Matrix[String]]{
    * @tparam T2 тип возвращаемого значения.
    * @return Матрица с новыми значениями
    */
-  def mapWithIndices[T2](f:Int=>Int=>T=>T2):Matrix[T2] = Matrix(
+  def mapWithIndices[T2](f:Int=>Int=>T=>T2):RectangleMatrix[T2] = RectangleMatrix(
     for(i<-indices._1) yield
       for(j<-indices._2) yield f(i)(j)(matrix(i)(j))
   )
@@ -92,16 +93,10 @@ case class Matrix[T](matrix: Seq[Seq[T]]) extends Printable[Matrix[String]]{
   def flatten: Seq[T] = matrix.flatten
 }
 
-object Matrix{
-  /**
-   * своего рода enum для открытого интерфейса печати
-   */
-  sealed trait Printable
-  case object Indices extends Printable
-  case object Matrix extends Printable
+object RectangleMatrix{
   class NotEqualLineLengthException extends Exception
 
-  def empty[T]:Matrix[T] = new Matrix(
+  def empty[T]:RectangleMatrix[T] = new RectangleMatrix(
     Seq.empty[Seq[T]]
   )
 }
