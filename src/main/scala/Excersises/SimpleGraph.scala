@@ -4,6 +4,7 @@ import Graphs.Matrix.RectangleMatrix
 import Graphs.Traits.Graph
 
 import scala.Array.ofDim
+import scala.annotation.tailrec
 import scala.collection.mutable
 
 
