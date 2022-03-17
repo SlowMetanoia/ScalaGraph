@@ -239,4 +239,49 @@ object SimpleGraph extends App{
       )
     )
   }.dfs(0).mkString(" "))
+
+  /**
+   *
+   * @param f
+   * @param node
+   * @param graph
+   * @return
+   */
+  def Traverse(f:((Int,Seq[Int],SimpleGraph,Array[Boolean]))=>(Int,Seq[Int],SimpleGraph,Array[Boolean]))
+              (node:Int)
+              (graph: SimpleGraph):Seq[Int] = {
+    f(node,Seq(node),graph,new Array[Boolean](graph.adjacencyMatrix.size._1))._2
+  }
+
+  @tailrec
+  def bfs(input:(Int,Seq[Int],SimpleGraph,Array[Boolean])):(Int,Seq[Int],SimpleGraph,Array[Boolean]) = {
+    val (index,order,graph,visited) = input
+    val newNodes = graph.getNeighbours(order(index)).filterNot(node => visited(node))
+    newNodes.foreach(node=> visited(node) = true)
+    if(newNodes.isEmpty)
+      input
+    else
+      bfs((
+        index + 1,
+        order.take(index + 1) ++ newNodes ++ order.drop(index + 1),
+        graph,
+        visited
+      ))
+      }
+
+  @tailrec
+  def bfs2(index:Int, order:Seq[Int], graph:SimpleGraph, visited:Array[Boolean]): Seq[Int] = {
+    val newNodes = graph.getNeighbours(order(index)).filterNot(node => visited(node))
+    visited(order(index)) = true
+    newNodes.foreach(node=> visited(node) = true)
+    if(newNodes.isEmpty && (index == order.length-1) )
+      order
+    else
+      bfs2( index+1 , order.take(index+1) ++ newNodes ++ order.drop(index+1) , graph , visited )
+  }
+
+  def Traverse2(graph:SimpleGraph,
+                startFrom:Int,
+                traverseOrder:(Int,Seq[Int], SimpleGraph, Array[Boolean])=>Seq[Int] = bfs2): Seq[Int] =
+    traverseOrder(startFrom,Seq(startFrom),graph,new Array[Boolean](graph.adjacencyMatrix.size._1))
 }
