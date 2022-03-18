@@ -12,6 +12,10 @@ trait Matrix[T] {
    */
   val indices: (Seq[Int], Seq[Int])
 
+  /**
+   * Преобразование для печати
+   * @return матрицу, которую возможно напечатать
+   */
   def printConversion:Matrix[String]
 
   /**

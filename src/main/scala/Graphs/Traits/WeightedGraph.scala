@@ -3,7 +3,7 @@ package Graphs.Traits
 /**
  * Трейт для любых взвешенных графов - графов для рёбер которых определён вес.
  */
-trait WightedGraph extends Graph[Int] {
+trait WeightedGraph extends Graph[Int] {
   /**
    * Вес ребра
    * @param source вершина-источник

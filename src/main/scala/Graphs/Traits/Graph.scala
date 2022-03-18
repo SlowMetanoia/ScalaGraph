@@ -44,7 +44,7 @@ trait Graph[StoredType] {
    * Матрица смежности графа
    * @return Матрица, где по индексам (i,j) лежит true, если существует ребро из i в j
    */
-  def adjacencyMatrix: RectangleMatrix[StoredType]
+  def adjacencyMatrix: RectangleMatrix[Boolean]
 
   /**
    * @param source   номер вершины-источника
@@ -102,4 +102,7 @@ trait Graph[StoredType] {
 
   //3. Тема:"Пакет алгоритмов вычисления центральности на языке Scala" (КР по ФиЛП)
   //4. Тема:"Пакет алгоритмов выделения сообществ на языке Scala" (КР по ФиЛП)
+}
+object Graph {
+
 }

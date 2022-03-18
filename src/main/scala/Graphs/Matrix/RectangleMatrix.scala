@@ -91,6 +91,18 @@ case class RectangleMatrix[T](matrix: Seq[Seq[T]]) extends Printable[RectangleMa
     j<-indices._2
   } f(i)(j)(matrix(i)(j))
   def flatten: Seq[T] = matrix.flatten
+
+  def joinRight(other:RectangleMatrix[T]):RectangleMatrix[T] = other match {
+    case other:RectangleMatrix[T] if other.size._1 == size._1 => RectangleMatrix(
+      indices._1.map(i=>this.row(i) ++ other.row(i))
+    )
+    case _ => throw new IndexOutOfBoundsException
+  }
+
+  def joinBelow(other:RectangleMatrix[T]):RectangleMatrix[T] = other match {
+    case other:RectangleMatrix[T] if other.size._2 == size._2 => RectangleMatrix(matrix ++ other.matrix)
+    case _ => throw new IndexOutOfBoundsException
+  }
 }
 
 object RectangleMatrix{
