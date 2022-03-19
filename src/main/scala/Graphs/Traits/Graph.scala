@@ -38,7 +38,7 @@ trait Graph[StoredType] {
    * Матрица инцидентности графа
    * @return Матрица, где по индексам (i,j) лежит true, если i-тому ребру инцидентна j-ая вершина
    */
-  def incidenceMatrix: RectangleMatrix[StoredType]
+  def incidenceMatrix: RectangleMatrix[Boolean]
 
   /**
    * Матрица смежности графа
@@ -83,6 +83,8 @@ trait Graph[StoredType] {
    * @param source вершина-источник
    * @param receiver вершина-приёмник
    * @return Путь минимальной длинны из источника в приёмник, если такой путь существует.
+   *
+   *         Но здесь и место этой ерундовине?
    */
   def minimumLengthPath(source:Int,receiver:Int):Option[Seq[Int]]
 
@@ -100,9 +102,5 @@ trait Graph[StoredType] {
    */
   def newEdgesGraph(f:Int=>Int=>Boolean):Graph[StoredType]
 
-  //3. Тема:"Пакет алгоритмов вычисления центральности на языке Scala" (КР по ФиЛП)
   //4. Тема:"Пакет алгоритмов выделения сообществ на языке Scala" (КР по ФиЛП)
-}
-object Graph {
-
 }

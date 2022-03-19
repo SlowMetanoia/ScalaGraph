@@ -19,6 +19,8 @@ case class BipartiteGraphAdjacencyMatrix(leftPart:RectangleMatrix[Boolean],right
    */
   val actualIndices: (Seq[Int], Seq[Int]) = leftPart.indices
 
+  val sizeDifference: Int = size._1-actualSize._1
+
   /**
    * полноразмерная матрица
    */
@@ -32,17 +34,21 @@ case class BipartiteGraphAdjacencyMatrix(leftPart:RectangleMatrix[Boolean],right
   /**
    * matrix( i )( j ) = j элемент в i строке
    */
-  def apply(i: Int): Seq[Boolean] = ???
+  def apply(i: Int): Seq[Boolean] =
+    if (i<sizeDifference)
+      rightPart(i).prependedAll(new Array[Boolean](sizeDifference))
+    else
+      leftPart(i-sizeDifference).appendedAll(new Array[Boolean](size._1-actualSize._2))
+
 
   /**
    * matrix( i , j ) = j элемент в i строке
    */
   def apply(i: Int,j:Int): Boolean = {
-    val sizeDiff = size._1-actualSize._1
     (i,j) match {
-      case (i,j) if (i < sizeDiff && j < sizeDiff) || (i > sizeDiff && j > sizeDiff) => false
-      case (i,j) if  i < sizeDiff && j > sizeDiff => rightPart(i,j-sizeDiff)
-      case (i,j) if  i > sizeDiff && j < sizeDiff => leftPart(i-sizeDiff,j)
+      case (i,j) if (i < sizeDifference && j < sizeDifference) || (i >= sizeDifference && j >= sizeDifference) => false
+      case (i,j) if  i < sizeDifference && j >= sizeDifference => rightPart(i,j-sizeDifference)
+      case (i,j) if  i >= sizeDifference && j < sizeDifference => leftPart(i-sizeDifference,j)
     }
   }
 
@@ -57,7 +63,7 @@ case class BipartiteGraphAdjacencyMatrix(leftPart:RectangleMatrix[Boolean],right
    * @param i номер строки
    * @return строку матрицы
    */
-  override def row(i: Int): Seq[Boolean] = ???
+  override def row(i: Int): Seq[Boolean] = apply(i)
 
   /**
    * @param j номер столбца

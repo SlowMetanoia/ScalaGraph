@@ -6,7 +6,7 @@ import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
 
 class SimpleGraphTest extends AnyFlatSpec with should.Matchers{
-  val testGraph = SimpleGraph(
+  val testGraph1: SimpleGraph = SimpleGraph(
     RectangleMatrix(
       Seq(
         Seq(false, true, true, false, false, false, true),
@@ -19,11 +19,28 @@ class SimpleGraphTest extends AnyFlatSpec with should.Matchers{
       )
     )
   )
+  val testGraph2: SimpleGraph = SimpleGraph(
+    RectangleMatrix(
+      Seq{
+        Seq(false,true,false,false)
+        Seq(true,false,true,false)
+        Seq(false,true,false,true)
+        Seq(false,false,true,false)
+      }
+    )
+  )
+
   "Traverse(testGraph,bfs,0)" should "return seq of nodes in bfs order" in{
-    println(SimpleGraph.bfs2(
+    println(SimpleGraph.traverse(
+      testGraph1,
       0,
-      Seq(0),
-      testGraph,
-      new Array[Boolean](testGraph.adjacencyMatrix.size._1)).mkString(" "))
+      SimpleGraph.bfs
+    ).mkString(" "))
+
+    SimpleGraph.traverse(
+      testGraph2,
+      0,
+      SimpleGraph.bfs
+    ) should be(Seq(0,1,2,3))
   }
 }

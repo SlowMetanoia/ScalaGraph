@@ -1,7 +1,7 @@
 package Graphs.Implementations
 
 import Graphs.Matrix.RectangleMatrix
-import Graphs.Traits.{Graph, GraphMapper, WeightedGraph}
+import Graphs.Traits.{Graph, GraphMatter, WeightedGraph}
 
 import scala.Array.ofDim
 
@@ -43,10 +43,10 @@ override def edges: Seq[(Int, Int)] = for {
    *
    * @return Матрица, где по индексам (i,j) лежит true, если i-тому ребру инцидентна j-ая вершина
    */
-  override def incidenceMatrix: RectangleMatrix[Int] = RectangleMatrix(
+  override def incidenceMatrix: RectangleMatrix[Boolean] = RectangleMatrix(
     edges.map{edge=>
     for(i<-weightMatrix.indices._1)
-      yield if(edge._1==i) weightMatrix(i,edge._2) else 0
+      yield edge._1==i
   })
 
   /**
@@ -158,4 +158,4 @@ override def edges: Seq[(Int, Int)] = for {
   override def minimumWeightPath(source: Int, receiver: Int): Option[Seq[Int]] = ???
 }
 
-object OrientedWeightGraph extends GraphMapper[Int]
+object OrientedWeightGraph extends GraphMatter[Int]
