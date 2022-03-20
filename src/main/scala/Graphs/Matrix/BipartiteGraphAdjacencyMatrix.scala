@@ -26,9 +26,8 @@ case class BipartiteGraphAdjacencyMatrix(leftPart:RectangleMatrix[Boolean],right
    */
   def actualMatrix: RectangleMatrix[Boolean] = RectangleMatrix{
     indices._1.map(i=>
-      indices._2.map { j =>
-        apply(i,j)
-      })
+      apply(i)
+      )
   }
 
   /**
@@ -69,7 +68,11 @@ case class BipartiteGraphAdjacencyMatrix(leftPart:RectangleMatrix[Boolean],right
    * @param j номер столбца
    * @return столбец матрицы
    */
-  override def col(j: Int): Seq[Boolean] = ???
+  override def col(j: Int): Seq[Boolean] =
+    if (j<sizeDifference)
+      new Array[Boolean](sizeDifference).appendedAll(leftPart.col(j))
+    else
+      rightPart.col(j-sizeDifference).appendedAll(new Array[Boolean](size._1-actualSize._2))
 
   /**
    * map обыкновенный
@@ -78,7 +81,7 @@ case class BipartiteGraphAdjacencyMatrix(leftPart:RectangleMatrix[Boolean],right
    * @tparam T2 тип возвращаемого значения.
    * @return Матрица с новыми значениями
    */
-  override def map[T2](f: Boolean => T2): Matrix[T2] = ???
+  override def map[T2](f: Boolean => T2): Matrix[T2] = actualMatrix.map(f)
 
   /**
    * map с индексами
@@ -87,14 +90,17 @@ case class BipartiteGraphAdjacencyMatrix(leftPart:RectangleMatrix[Boolean],right
    * @tparam T2 тип возвращаемого значения.
    * @return Матрица с новыми значениями
    */
-override def mapWithIndices[T2](f: Int => Int => Boolean => T2): Matrix[T2] = ???
+override def mapWithIndices[T2](f: Int => Int => Boolean => T2): Matrix[T2] = actualMatrix.mapWithIndices(f)
 
   /**
    * foreach обыкновенный
    *
    * @param f функция потребляющая T
    */
-  override def foreach(f: Boolean => Unit): Unit = ???
+  override def foreach(f: Boolean => Unit): Unit = {
+    leftPart.foreach(f)
+    rightPart.foreach(f)
+  }
 
   /**
    * foreach с индексами
@@ -103,9 +109,13 @@ override def mapWithIndices[T2](f: Int => Int => Boolean => T2): Matrix[T2] = ??
    *
    * @param f функция, потребляющая индексы и T
    */
-  override def foreachWithIndices(f: Int => Int => Boolean => Unit): Unit = ???
+  override def foreachWithIndices(f: Int => Int => Boolean => Unit): Unit =
+    {
+      leftPart.foreachWithIndices(f)
+      rightPart.foreachWithIndices(f)
+    }
 
-  override def flatten: Seq[Boolean] = ???
+  override def flatten: Seq[Boolean] = actualMatrix.flatten
 
   override lazy val matrix: Seq[Seq[Boolean]] = actualMatrix.matrix
 }
