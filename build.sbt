@@ -4,9 +4,16 @@ ThisBuild / scalaVersion := "2.13.6"
 
 lazy val root = (project in file("."))
   .settings(
-    name := "ScalaGraph"
+    name := "ScalaGraph",
   )
 
-libraryDependencies += (
-  "org.scalatest" %% "scalatest" % "3.2.9" % Test
-  )
+val scalikejdbcVersion = "4.0.0"
+
+libraryDependencies ++= Seq(
+  "org.scalatest" %% "scalatest" % "3.2.9" % Test,
+  "org.scalikejdbc" %% "scalikejdbc" % scalikejdbcVersion,
+  "org.scalikejdbc" %% "scalikejdbc-interpolation" % scalikejdbcVersion,
+  "org.scalikejdbc" %% "scalikejdbc-core" % scalikejdbcVersion,
+  "org.scalikejdbc" %% "scalikejdbc-test" % scalikejdbcVersion % Test,
+  "org.scalikejdbc" %% "scalikejdbc-config" % scalikejdbcVersion
+)
