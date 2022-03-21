@@ -26,7 +26,7 @@ trait Graph[StoredType] {
    * @param receiver номер 2-ой вершины
    * @return true если существует ребро между source и receiver иначе false
    */
-  def hasEdge(source: Int, receiver: Int): StoredType
+  def hasEdge(source: Int, receiver: Int): Boolean
 
   /**
    * Рёбра/дуги графа

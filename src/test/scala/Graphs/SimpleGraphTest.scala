@@ -21,16 +21,16 @@ class SimpleGraphTest extends AnyFlatSpec with should.Matchers{
   )
   val testGraph2: SimpleGraph = SimpleGraph(
     RectangleMatrix(
-      Seq{
-        Seq(false,true,false,false)
-        Seq(true,false,true,false)
-        Seq(false,true,false,true)
-        Seq(false,false,true,false)
-      }
+      Seq(
+        Seq(false,true,false,false),
+        Seq(false,false,true,false),
+        Seq(false,false,false,true),
+        Seq(false,false,false,false)
+      )
     )
   )
 
   "Traverse(testGraph,bfs,0)" should "return seq of nodes in bfs order" in{
-
+    println(SimpleGraph.partTraverse(testGraph1, 4, SimpleGraph.bfs).mkString("\n"))
   }
 }
