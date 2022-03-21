@@ -119,3 +119,6 @@ override def mapWithIndices[T2](f: Int => Int => Boolean => T2): Matrix[T2] = ac
 
   override lazy val matrix: Seq[Seq[Boolean]] = actualMatrix.matrix
 }
+object BipartiteGraphAdjacencyMatrix{
+  def fromAdjacencyMatrix(adjacencyMatrix: RectangleMatrix[Boolean]):BipartiteGraphAdjacencyMatrix = ???
+}

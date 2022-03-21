@@ -31,16 +31,6 @@ class SimpleGraphTest extends AnyFlatSpec with should.Matchers{
   )
 
   "Traverse(testGraph,bfs,0)" should "return seq of nodes in bfs order" in{
-    println(SimpleGraph.traverse(
-      testGraph1,
-      0,
-      SimpleGraph.bfs
-    ).mkString(" "))
 
-    SimpleGraph.traverse(
-      testGraph2,
-      0,
-      SimpleGraph.bfs
-    ) should be(Seq(0,1,2,3))
   }
 }

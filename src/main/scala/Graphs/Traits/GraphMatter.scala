@@ -1,62 +1,30 @@
 package Graphs.Traits
 
-import scala.annotation.tailrec
-
 trait GraphMatter[T] {
 
-  /** Абстрактный обход графа
-   *
-   * @param graph обходимый граф
-   * @param startFrom индекс начала обхода
-   * @param traverseOrder функция задающая порядок обход
-   * @return последовательность обхода вершин графа
-   */
-  def traverse(
-                   graph:Graph[T],
-                   startFrom:Int,
-                   traverseOrder:(Int,Seq[Int], Graph[T], Array[Boolean])=>Seq[Int] = bfs
-              ):Seq[Int] =
-    traverseOrder(0,Seq(startFrom),graph,new Array[Boolean](graph.adjacencyMatrix.size._1))
-
-  /**bfs (грязный?)
-   *
-   * @param index текущий индекс в порядке обхода
-   * @param order текущий порядок обхода
-   * @param graph обходимый граф
-   * @param visited посещена вершина или не
-   * @return порядок обхода графа при bfs
-   */
-  @tailrec
-  final def bfs(
-                 index:Int,
-                 order:Seq[Int],
-                 graph:Graph[T],
-                 visited:Array[Boolean]
-               ): Seq[Int] = {
-    val newNodes = graph.getNeighbours(order(index)).filterNot(node => visited(node))
-    visited(order(index)) = true
-    newNodes.foreach(node => visited(node) = true)
-    if(newNodes.isEmpty && (index == order.length-1) )
-      order
-    else
-      bfs(
-        index+1,
-        order.take(index+1) ++ newNodes ++ order.drop(index+1),
-        graph,
-        visited
-      )
+  final protected class GraphContext(val graph: Graph[T]){
+     val visited = new Array[Boolean](graph.adjacencyMatrix.size._1)
+  }
+  final protected object GraphContext{
+    def apply(graph: Graph[T]):GraphContext = new GraphContext(graph)
   }
 
-  def lazyTraverse(
+  /**
+   * Ленивый обход связной компоненты графа
+   * @param graph обходимый граф
+   * @param startFrom начальная вершина
+   * @param lazyTraverseOrder функция обхода
+   * @return
+   */
+  final def lazyPartTraverse(
                   graph: Graph[T],
                   startFrom: Int,
-                  lazyTraverseOrder:(LazyList[Seq[Int]],Graph[T],Array[Boolean])=>LazyList[Seq[Int]]
+                  lazyTraverseOrder:(LazyList[Seq[Int]],GraphContext)=>LazyList[Seq[Int]]
                   ):LazyList[Seq[Int]] =
-    lazyTraverseOrder(LazyList(Seq(startFrom)),graph,new Array[Boolean](graph.adjacencyMatrix.size._1))
+    lazyTraverseOrder(LazyList(Seq(startFrom)),GraphContext(graph))
 
-  def lazyBFS(
+  final def lazyBFS(
              order:LazyList[Seq[Int]],
-             graph: Graph[T],
-             visited: Array[Boolean]
+             graphContext: GraphContext
              ):LazyList[Seq[Int]] = ???
 }
