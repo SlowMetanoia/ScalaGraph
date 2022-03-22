@@ -27,4 +27,10 @@ object Configurations extends App {
   skillDAO.insert(skill)
   println(skillDAO.findById(skill.id))
 
+  val skillToUpdate = SkillEntity(skill.id, "IOWHFIOHIOW")
+  skillDAO.update(skillToUpdate)
+
+  println(skillDAO.findById(skill.id))
+
+
 }
