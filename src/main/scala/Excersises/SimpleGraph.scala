@@ -1,7 +1,8 @@
 package Excersises
 
+import Graphs.Algorithms.GraphTraverser
 import Graphs.Matrix.RectangleMatrix
-import Graphs.Traits.{Graph, GraphMatter}
+import Graphs.Traits.Graph
 
 import scala.Array.ofDim
 import scala.collection.mutable
@@ -200,4 +201,4 @@ case class SimpleGraph(adjacencyMatrix:RectangleMatrix[Boolean]) extends Graph[B
   override def newEdgesGraph(f: Int => Int => Boolean): Graph[Boolean] = ???
 }
 
-object SimpleGraph extends GraphMatter[Boolean]
+object SimpleGraph extends GraphTraverser[Boolean]

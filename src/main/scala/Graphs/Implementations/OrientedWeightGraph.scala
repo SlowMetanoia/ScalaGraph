@@ -1,7 +1,8 @@
 package Graphs.Implementations
 
+import Graphs.Algorithms.GraphTraverser
 import Graphs.Matrix.RectangleMatrix
-import Graphs.Traits.{Graph, GraphMatter, WeightedGraph}
+import Graphs.Traits.{Graph, WeightedGraph}
 
 import scala.Array.ofDim
 
@@ -158,4 +159,4 @@ override def edges: Seq[(Int, Int)] = for {
   override def minimumWeightPath(source: Int, receiver: Int): Option[Seq[Int]] = ???
 }
 
-object OrientedWeightGraph extends GraphMatter[Int]
+object OrientedWeightGraph extends GraphTraverser[Int]

@@ -1,6 +1,7 @@
 package Graphs.Matrix
 
-import Graphs.Traits.{GraphMatter, Matrix}
+import Graphs.Algorithms.GraphTraverser
+import Graphs.Traits.Matrix
 
 case class BipartiteGraphAdjacencyMatrix(leftPart:RectangleMatrix[Boolean],rightPart:RectangleMatrix[Boolean]) extends Matrix[Boolean] {
 
@@ -117,7 +118,7 @@ override def mapWithIndices[T2](f: Int => Int => Boolean => T2): Matrix[T2] = fu
 
   override lazy val matrix: Seq[Seq[Boolean]] = fullMatrix.matrix
 }
-object BipartiteGraphAdjacencyMatrix extends GraphMatter[Boolean]{
+object BipartiteGraphAdjacencyMatrix extends GraphTraverser[Boolean]{
   class WrongNumbersAsElementsException extends
     Exception("left and right elems have to be same as their indices somewhere")
   def fromIndicesSequences(
