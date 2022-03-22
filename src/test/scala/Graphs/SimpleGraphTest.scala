@@ -1,6 +1,7 @@
 package Graphs
 
 import Excersises.SimpleGraph
+import Graphs.Algorithms.Colorization
 import Graphs.Matrix.RectangleMatrix
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
@@ -29,8 +30,23 @@ class SimpleGraphTest extends AnyFlatSpec with should.Matchers{
       )
     )
   )
+  val bipartiteGraphTest0:SimpleGraph = SimpleGraph(RectangleMatrix(
+    Seq(
+      Seq(0, 0, 0, 0, 1, 1, 0, 0),
+      Seq(0, 0, 0, 0, 1, 0, 1, 0),
+      Seq(0, 0, 0, 1, 0, 1, 0, 1),
+      Seq(0, 0, 1, 0, 0, 0, 0, 0),
+      Seq(1, 1, 0, 0, 0, 0, 0, 0),
+      Seq(1, 0, 1, 0, 0, 0, 0, 0),
+      Seq(0, 1, 0, 0, 0, 0, 0, 0),
+      Seq(0, 0, 1, 0, 0, 0, 0, 0)
+    )).map(_==1))
 
   "Traverse(testGraph,bfs,0)" should "return seq of nodes in bfs order" in{
-    println(SimpleGraph.partTraverse(testGraph1, 4, SimpleGraph.bfs).mkString("\n"))
+    SimpleGraph.partTraverse(testGraph1, SimpleGraph.bfs, 4).flatten should be(LazyList(4,3,5,1,6,0,2))
+  }
+  "bipartiteGraphTest0" should "be bipartite" in{
+    Colorization.isBipartite(testGraph2)(SimpleGraph) should be(true)
+    Colorization.isBipartite(bipartiteGraphTest0)(SimpleGraph) should be(true)
   }
 }

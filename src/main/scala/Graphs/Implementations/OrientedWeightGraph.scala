@@ -25,7 +25,7 @@ case class OrientedWeightGraph(weightMatrix:RectangleMatrix[Int]) extends Graph[
    * @param receiver номер 2-ой вершины
    * @return true если существует ребро между source и receiver иначе false
    */
-  override def hasEdge(source: Int, receiver: Int): Int = weightMatrix(source,receiver)
+  override def hasEdge(source: Int, receiver: Int): Boolean = weightMatrix(source,receiver) != 0
 
   /**
    * Рёбра/дуги графа

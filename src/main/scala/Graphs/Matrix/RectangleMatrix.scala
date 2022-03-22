@@ -103,6 +103,9 @@ case class RectangleMatrix[T](matrix: Seq[Seq[T]]) extends Printable[RectangleMa
     case other:RectangleMatrix[T] if other.size._2 == size._2 => RectangleMatrix(matrix ++ other.matrix)
     case _ => throw new IndexOutOfBoundsException
   }
+  def rotatedClockwise:RectangleMatrix[T] = ???
+  def transposed:RectangleMatrix[T] = RectangleMatrix(indices._2.map(col))
+  def rotatedCounterclockwise:RectangleMatrix[T] = ???
 }
 
 object RectangleMatrix{

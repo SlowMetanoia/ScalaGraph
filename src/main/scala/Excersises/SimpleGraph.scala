@@ -9,7 +9,6 @@ import scala.collection.mutable
 
 case class SimpleGraph(adjacencyMatrix:RectangleMatrix[Boolean]) extends Graph[Boolean]{
 
-
   def this(nodeNumber:Int,edges:Seq[(Int,Int)]){
     this(
       RectangleMatrix(
@@ -97,38 +96,14 @@ case class SimpleGraph(adjacencyMatrix:RectangleMatrix[Boolean]) extends Graph[B
    *
    * @return true, если граф связен(сильно связен), иначе false
    */
-  override def isConnected: Boolean = ???
+  override def isConnected: Boolean = SimpleGraph.partTraverse(this).flatten.size == adjacencyMatrix.size._1
 
   /**
    * Разбиение графа на связные (сильно-связные) части
    *
    * @return последовательность связных частей графа
    */
-  override def connectedParts: Seq[Seq[Int]] = ???/*{
-    //Это императивное решение!
-    //плохо оптимизировано
-    //негибкое
-    //не учитывает специфику конкретных условий
-    var result = Seq.empty[Seq[Int]]
-    var nodeSet = adjacencyMatrix.row(0).indices.toSet
-
-    @tailrec
-    def reducePart(knownConnected:Set[Int]):Set[Int] = {
-      val newConnected = knownConnected.flatMap(a => getNeighbours(a)) & knownConnected
-      if (newConnected.isEmpty) {
-        nodeSet --= knownConnected
-        knownConnected
-      } else
-        reducePart(newConnected)
-    }
-
-    while(nodeSet.nonEmpty){
-      result = result.appended(
-        reducePart(Set(nodeSet.head))
-      )
-    }
-  result
-  }*/
+  override def connectedParts: Seq[Seq[Int]] = ???
 
   /**
    * Путь минимальной длинны

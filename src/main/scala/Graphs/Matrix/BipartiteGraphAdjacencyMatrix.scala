@@ -1,6 +1,6 @@
 package Graphs.Matrix
 
-import Graphs.Traits.Matrix
+import Graphs.Traits.{GraphMatter, Matrix}
 
 case class BipartiteGraphAdjacencyMatrix(leftPart:RectangleMatrix[Boolean],rightPart:RectangleMatrix[Boolean]) extends Matrix[Boolean] {
 
@@ -24,10 +24,8 @@ case class BipartiteGraphAdjacencyMatrix(leftPart:RectangleMatrix[Boolean],right
   /**
    * полноразмерная матрица
    */
-  def actualMatrix: RectangleMatrix[Boolean] = RectangleMatrix{
-    indices._1.map(i=>
-      apply(i)
-      )
+  def fullMatrix: RectangleMatrix[Boolean] = RectangleMatrix{
+    indices._1.map(apply)
   }
 
   /**
@@ -56,7 +54,7 @@ case class BipartiteGraphAdjacencyMatrix(leftPart:RectangleMatrix[Boolean],right
    */
   override val indices: (Seq[Int], Seq[Int]) = (0 to size._1,0 to size._2)
 
-  override def printConversion: Matrix[String] = actualMatrix.printConversion
+  override def printConversion: Matrix[String] = fullMatrix.printConversion
 
   /**
    * @param i номер строки
@@ -81,7 +79,7 @@ case class BipartiteGraphAdjacencyMatrix(leftPart:RectangleMatrix[Boolean],right
    * @tparam T2 тип возвращаемого значения.
    * @return Матрица с новыми значениями
    */
-  override def map[T2](f: Boolean => T2): Matrix[T2] = actualMatrix.map(f)
+  override def map[T2](f: Boolean => T2): Matrix[T2] = fullMatrix.map(f)
 
   /**
    * map с индексами
@@ -90,7 +88,7 @@ case class BipartiteGraphAdjacencyMatrix(leftPart:RectangleMatrix[Boolean],right
    * @tparam T2 тип возвращаемого значения.
    * @return Матрица с новыми значениями
    */
-override def mapWithIndices[T2](f: Int => Int => Boolean => T2): Matrix[T2] = actualMatrix.mapWithIndices(f)
+override def mapWithIndices[T2](f: Int => Int => Boolean => T2): Matrix[T2] = fullMatrix.mapWithIndices(f)
 
   /**
    * foreach обыкновенный
@@ -115,10 +113,32 @@ override def mapWithIndices[T2](f: Int => Int => Boolean => T2): Matrix[T2] = ac
       rightPart.foreachWithIndices(f)
     }
 
-  override def flatten: Seq[Boolean] = actualMatrix.flatten
+  override def flatten: Seq[Boolean] = fullMatrix.flatten
 
-  override lazy val matrix: Seq[Seq[Boolean]] = actualMatrix.matrix
+  override lazy val matrix: Seq[Seq[Boolean]] = fullMatrix.matrix
 }
-object BipartiteGraphAdjacencyMatrix{
-  def fromAdjacencyMatrix(adjacencyMatrix: RectangleMatrix[Boolean]):BipartiteGraphAdjacencyMatrix = ???
+object BipartiteGraphAdjacencyMatrix extends GraphMatter[Boolean]{
+  class WrongNumbersAsElementsException extends
+    Exception("left and right elems have to be same as their indices somewhere")
+  def fromIndicesSequences(
+                leftElementsIndices:Seq[Int],
+                rightElementsIndices:Seq[Int],
+                f:(Int,Int)=>Boolean
+              ):BipartiteGraphAdjacencyMatrix = {
+
+    if(
+      !(leftElementsIndices ++ rightElementsIndices)
+      .iterator.sameElements(
+      0 until leftElementsIndices.size + rightElementsIndices.size
+    )) {
+      throw new WrongNumbersAsElementsException()
+    }
+
+    BipartiteGraphAdjacencyMatrix(
+      RectangleMatrix(
+        leftElementsIndices.sortWith(_ > _).map(i=> rightElementsIndices.map(j=> f(i,j)))),
+      RectangleMatrix(
+        rightElementsIndices.sortWith(_ > _).map(i=> leftElementsIndices.map(j=> f(i,j))))
+    )
+  }
 }
