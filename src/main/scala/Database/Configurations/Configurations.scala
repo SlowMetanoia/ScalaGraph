@@ -1,6 +1,6 @@
-package database.Configurations
+package Database.Configurations
 
-import database.Models.Dao.{SkillDao, SkillDaoIml, SkillEntity}
+import Database.Models.Dao.{SkillDao, SkillDaoIml, SkillEntity}
 import scalikejdbc.config.DBs
 
 import java.util.UUID

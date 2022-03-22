@@ -1,4 +1,4 @@
-package database.Models.Dao
+package Database.Models.Dao
 import scalikejdbc.{NamedDB, scalikejdbcSQLInterpolationImplicitDef}
 
 import java.util.UUID
