@@ -1,4 +1,6 @@
-package Database.Models.Dao
+package Databases.Dao
+
+import Databases.Models.Dao.SkillEntity
 
 import java.util.UUID
 

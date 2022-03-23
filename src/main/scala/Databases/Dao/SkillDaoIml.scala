@@ -1,4 +1,6 @@
-package Database.Models.Dao
+package Databases.Dao
+
+import Databases.Models.Dao.SkillEntity
 import scalikejdbc.{NamedDB, scalikejdbcSQLInterpolationImplicitDef}
 
 import java.util.UUID
@@ -15,7 +17,7 @@ case class SkillDaoIml(dbName: String) extends SkillDao {
     NamedDB(s"$dbName") readOnly { implicit session =>
       sql"""
         SELECT * FROM SKILL
-        WHERE id = ${id}
+        WHERE id = $id
       """.map(skill => SkillEntity(UUID.nameUUIDFromBytes(skill.bytes("id")), skill.string("name"))).single.apply()
     }
 
@@ -31,7 +33,7 @@ case class SkillDaoIml(dbName: String) extends SkillDao {
     NamedDB(s"$dbName") localTx { implicit session =>
       sql"""
         DELETE FROM SKILL
-        WHERE id = ${id}
+        WHERE id = $id
       """.update.apply()
     }
 
@@ -39,7 +41,7 @@ case class SkillDaoIml(dbName: String) extends SkillDao {
     NamedDB(s"$dbName") localTx { implicit session =>
       sql"""
         UPDATE SKILL
-        SET id = ${skill.id}, name = ${skill.id}
+        SET id = ${skill.id}, name = ${skill.name}
         WHERE id = ${skill.id}
       """.update.apply()
     }

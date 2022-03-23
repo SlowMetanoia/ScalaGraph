@@ -1,4 +1,4 @@
-package Database.Models.Dao
+package Databases.Models.Dao
 
 import java.util.UUID
 
