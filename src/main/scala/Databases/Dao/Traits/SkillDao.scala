@@ -1,4 +1,4 @@
-package Databases.Dao
+package Databases.Dao.Traits
 
 import Databases.Models.Dao.SkillEntity
 

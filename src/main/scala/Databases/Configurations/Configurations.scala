@@ -1,6 +1,7 @@
 package Databases.Configurations
 
-import Databases.Dao.{KnowledgeDao, KnowledgeDaoIml}
+import Databases.Dao.Implementations.{CourseDaoImpl, KnowledgeDaoImpl}
+import Databases.Dao.Traits.{CourseDao, KnowledgeDao}
 import Databases.Models.Dao.KnowledgeEntity
 import scalikejdbc.config.DBs
 
@@ -16,13 +17,10 @@ import java.util.UUID
 object Configurations extends App {
   DBs.setupAll()
 
-  val knowledgeDao: KnowledgeDao = KnowledgeDaoIml("horizontal")
+  val courseDao: CourseDao = CourseDaoImpl("horizontal")
 
-  println(knowledgeDao.findAll())
-
-  val knowledge = KnowledgeEntity(UUID.randomUUID(), "ЗНАНИЕ1")
-  knowledgeDao.insert(knowledge)
-  println(knowledgeDao.findById(knowledge.id))
-  val update = KnowledgeEntity(knowledge.id, "ЗНАНИЕ!!!!")
+  val course = courseDao.findById(UUID.fromString("32a2faef-8e58-427b-96cc-ae6cb299f824"))
+  println(course)
+  println(course.get.outputSkills)
 
 }

@@ -1,11 +1,12 @@
-package Databases.Dao
+package Databases.Dao.Implementations
 
+import Databases.Dao.Traits.SkillDao
 import Databases.Models.Dao.SkillEntity
 import scalikejdbc.{NamedDB, scalikejdbcSQLInterpolationImplicitDef}
 
 import java.util.UUID
 
-case class SkillDaoIml(dbName: String) extends SkillDao {
+case class SkillDaoImpl(dbName: String) extends SkillDao {
   override def findAll(): Seq[SkillEntity] =
     NamedDB(s"$dbName") readOnly { implicit session =>
       sql"""

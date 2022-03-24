@@ -1,10 +1,12 @@
-package Databases.Dao
+package Databases.Dao.Implementations
+
+import Databases.Dao.Traits.AbilityDao
 import Databases.Models.Dao.AbilityEntity
 import scalikejdbc.{NamedDB, scalikejdbcSQLInterpolationImplicitDef}
 
 import java.util.UUID
 
-case class AbilityDaoIml(dbName: String) extends AbilityDao {
+case class AbilityDaoImpl(dbName: String) extends AbilityDao {
   override def findAll(): Seq[AbilityEntity] =
     NamedDB(s"$dbName") readOnly { implicit session =>
       sql"""

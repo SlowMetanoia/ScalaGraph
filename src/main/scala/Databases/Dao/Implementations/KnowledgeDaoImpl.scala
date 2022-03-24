@@ -1,10 +1,12 @@
-package Databases.Dao
+package Databases.Dao.Implementations
+
+import Databases.Dao.Traits.KnowledgeDao
 import Databases.Models.Dao.KnowledgeEntity
 import scalikejdbc.{NamedDB, scalikejdbcSQLInterpolationImplicitDef}
 
 import java.util.UUID
 
-case class KnowledgeDaoIml(dbName: String) extends KnowledgeDao {
+case class KnowledgeDaoImpl(dbName: String) extends KnowledgeDao {
   override def findAll(): Seq[KnowledgeEntity] =
     NamedDB(s"$dbName") readOnly { implicit session =>
       sql"""
