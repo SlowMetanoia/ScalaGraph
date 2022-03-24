@@ -21,6 +21,11 @@ object Configurations extends App {
 
   val course = courseDao.findById(UUID.fromString("32a2faef-8e58-427b-96cc-ae6cb299f824"))
   println(course)
+  println(course.get.inputSkills)
   println(course.get.outputSkills)
+  println(course.get.inputAbility)
+  println(course.get.outputAbility)
+  println(course.get.inputKnowledge)
+  println(course.get.outputKnowledge)
 
 }
