@@ -11,7 +11,7 @@ case class KnowledgeDaoImpl(dbName: String) extends KnowledgeDao {
     NamedDB(s"$dbName") readOnly { implicit session =>
       sql"""
         SELECT * FROM KNOWLEDGE
-      """.map(knowledge => KnowledgeEntity(UUID.nameUUIDFromBytes(knowledge.bytes("id")), knowledge.string("name"))).collection.apply()
+      """.map(knowledge => KnowledgeEntity(UUID.fromString(knowledge.string("id")), knowledge.string("name"))).collection.apply()
     }
 
   override def findById(id: UUID): Option[KnowledgeEntity] =
@@ -19,7 +19,7 @@ case class KnowledgeDaoImpl(dbName: String) extends KnowledgeDao {
       sql"""
         SELECT * FROM KNOWLEDGE
         WHERE id = $id
-      """.map(knowledge => KnowledgeEntity(UUID.nameUUIDFromBytes(knowledge.bytes("id")), knowledge.string("name"))).single.apply()
+      """.map(knowledge => KnowledgeEntity(UUID.fromString(knowledge.string("id")), knowledge.string("name"))).single.apply()
     }
 
   override def insert(knowledge: KnowledgeEntity): Unit =

@@ -11,7 +11,7 @@ case class AbilityDaoImpl(dbName: String) extends AbilityDao {
     NamedDB(s"$dbName") readOnly { implicit session =>
       sql"""
         SELECT * FROM ABILITY
-      """.map(ability => AbilityEntity(UUID.nameUUIDFromBytes(ability.bytes("id")), ability.string("name"))).collection.apply()
+      """.map(ability => AbilityEntity(UUID.fromString(ability.string("id")), ability.string("name"))).collection.apply()
     }
 
   override def findById(id: UUID): Option[AbilityEntity] =
@@ -19,7 +19,7 @@ case class AbilityDaoImpl(dbName: String) extends AbilityDao {
       sql"""
         SELECT * FROM ABILITY
         WHERE id = $id
-      """.map(ability => AbilityEntity(UUID.nameUUIDFromBytes(ability.bytes("id")), ability.string("name"))).single.apply()
+      """.map(ability => AbilityEntity(UUID.fromString(ability.string("id")), ability.string("name"))).single.apply()
     }
 
   override def insert(ability: AbilityEntity): Unit =

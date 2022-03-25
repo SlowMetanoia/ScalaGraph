@@ -19,13 +19,36 @@ object Configurations extends App {
 
   val courseDao: CourseDao = CourseDaoImpl("horizontal")
 
-  val course = courseDao.findById(UUID.fromString("32a2faef-8e58-427b-96cc-ae6cb299f824"))
-  println(course)
-  println(course.get.inputSkills)
-  println(course.get.outputSkills)
-  println(course.get.inputAbility)
-  println(course.get.outputAbility)
-  println(course.get.inputKnowledge)
-  println(course.get.outputKnowledge)
+  val course = courseDao.findById(UUID.fromString("1fba5a15-c61a-45a0-87ba-98290338968a"))
 
+
+
+  val courseSeq = courseDao.findAll()
+
+//  println(course)
+//  println(course.get.inputSkills)
+//  println(course.get.outputSkills)
+//  println(course.get.inputAbility)
+//  println(course.get.outputAbility)
+//  println(course.get.inputKnowledge)
+//  println(course.get.outputKnowledge)
+
+  courseSeq.foreach(c => {
+    println()
+    println()
+    println(c)
+    println(c.inputSkills)
+    println(c.outputSkills)
+    println(c.inputAbility)
+    println(c.outputAbility)
+    println(c.inputKnowledge)
+    println(c.outputKnowledge)
+  })
+//  println(courseSeq)
+//  println(courseSeq.head.inputSkills)
+//  println(courseSeq.head.outputSkills)
+//  println(courseSeq.head.inputAbility)
+//  println(courseSeq.head.outputAbility)
+//  println(courseSeq.head.inputKnowledge)
+//  println(courseSeq.head.outputKnowledge)
 }

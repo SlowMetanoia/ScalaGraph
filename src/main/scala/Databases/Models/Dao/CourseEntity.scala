@@ -10,5 +10,5 @@ case class CourseEntity(
   inputAbility: Seq[AbilityEntity],
   outputAbility: Seq[AbilityEntity],
   inputKnowledge: Seq[KnowledgeEntity],
-  outputKnowledge: Seq[KnowledgeEntity],
+  outputKnowledge: Seq[KnowledgeEntity]
 )

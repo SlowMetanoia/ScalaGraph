@@ -11,7 +11,7 @@ case class SkillDaoImpl(dbName: String) extends SkillDao {
     NamedDB(s"$dbName") readOnly { implicit session =>
       sql"""
         SELECT * FROM SKILL
-      """.map(skill => SkillEntity(UUID.nameUUIDFromBytes(skill.bytes("id")), skill.string("name"))).collection.apply()
+      """.map(skill => SkillEntity(UUID.fromString(skill.string("id")), skill.string("name"))).collection.apply()
     }
 
   override def findById(id: UUID): Option[SkillEntity] =
@@ -19,7 +19,7 @@ case class SkillDaoImpl(dbName: String) extends SkillDao {
       sql"""
         SELECT * FROM SKILL
         WHERE id = $id
-      """.map(skill => SkillEntity(UUID.nameUUIDFromBytes(skill.bytes("id")), skill.string("name"))).single.apply()
+      """.map(skill => SkillEntity(UUID.fromString(skill.string("id")), skill.string("name"))).single.apply()
     }
 
   override def insert(skill: SkillEntity): Unit =
