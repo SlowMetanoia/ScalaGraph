@@ -5,6 +5,7 @@ import java.util.UUID
 /**
  * Класс сущностей Course соответсвующий таблице COURSE в БД
  * Может содержать только поля
+ * Слой для работы с БД
  * */
 case class CourseEntity(
   id: UUID,
