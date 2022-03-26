@@ -9,7 +9,10 @@ import java.util.UUID
  * */
 trait KnowledgeDao {
   /**
-   * Получение всех Knowledge из таблицы
+   * @param limit - кол-во записей которые необходимо получить
+   * @param offset - отсутуп от начала полученных записей
+   * @param orderBy - поле по которому необходимо отсортировать записи
+   * @param sort - порядок сортировки
    * @return последовательность всех Knowledge из таблицы
    */
   def findAll(limit: Int = 100,

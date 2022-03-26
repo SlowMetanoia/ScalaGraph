@@ -10,6 +10,10 @@ import java.util.UUID
 trait AbilityDao {
   /**
    * Получение всех Ability из таблицы
+   * @param limit - кол-во записей которые необходимо получить
+   * @param offset - отсутуп от начала полученных записей
+   * @param orderBy - поле по которому необходимо отсортировать записи
+   * @param sort - порядок сортировки
    * @return последовательность всех Ability из таблицы
    */
   def findAll(limit: Int = 100,

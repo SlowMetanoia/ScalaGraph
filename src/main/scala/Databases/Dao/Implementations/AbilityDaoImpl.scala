@@ -17,6 +17,10 @@ case class AbilityDaoImpl(dbName: String) extends AbilityDao {
 
   /**
    * Выполнение SQL запроса на получение всех записей из таблицы Ability
+   * @param limit - кол-во записей которые необходимо получить
+   * @param offset - отсутуп от начала полученных записей
+   * @param orderBy - поле по которому необходимо отсортировать записи
+   * @param sort - порядок сортировки
    * @return последовательность всех Ability из таблицы
    */
   override def findAll(limit: Int = 100,

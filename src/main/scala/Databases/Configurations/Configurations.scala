@@ -2,9 +2,7 @@ package Databases.Configurations
 
 import Databases.Dao.Implementations.{AbilityDaoImpl, CourseDaoImpl, KnowledgeDaoImpl, SkillDaoImpl}
 import Databases.Dao.Traits.{AbilityDao, CourseDao, KnowledgeDao, SkillDao}
-import scalikejdbc.SQL
 import scalikejdbc.config.DBs
-import scalikejdbc.interpolation.SQLSyntax
 
 /**
  * Конфигурация подключений к БД.

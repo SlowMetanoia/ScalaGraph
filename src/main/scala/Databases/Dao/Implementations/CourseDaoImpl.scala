@@ -27,7 +27,10 @@ case class CourseDaoImpl(dbName: String) extends CourseDao {
 
   /**
    * Выполнение SQL запроса на получение всех записей из таблицы Course
-   *
+   * @param limit - кол-во записей которые необходимо получить
+   * @param offset - отсутуп от начала полученных записей
+   * @param orderBy - поле по которому необходимо отсортировать записи
+   * @param sort - порядок сортировки
    * @return последовательность всех Course из таблицы
    */
   override def findAll(limit: Int = 100,
