@@ -30,12 +30,29 @@ case class CourseDaoImpl(dbName: String) extends CourseDao {
    *
    * @return последовательность всех Course из таблицы
    */
-  override def findAll(): Seq[CourseEntity] = {
+  override def findAll(limit: Int = 100,
+                       offset: Int = 0,
+                       orderBy:String = "id",
+                       sort: String = "ASC"): Seq[CourseEntity] = {
+
+    val order = orderBy match {
+      case "id" => sqls"id"
+      case "name" => sqls"name"
+    }
+
+    val sortType = sort match {
+      case "ASC" => sqls"asc"
+      case "DESC" => sqls"desc"
+    }
+
     //Из таблицы Course получаем id и имя
     val coursePlugs: Seq[CoursePlug] = {
       NamedDB(s"$dbName") readOnly { implicit session =>
         sql"""
           SELECT * FROM course
+          ORDER BY $order $sortType
+          LIMIT $limit
+          OFFSET $offset
         """.map(course => CoursePlug(
           UUID.fromString(course.string("id")),
           course.string("name"))

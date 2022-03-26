@@ -19,15 +19,33 @@ case class SkillDaoImpl(dbName: String) extends SkillDao {
    * Выполнение SQL запроса на получение всех записей из таблицы Skill
    * @return последовательность всех Skill из таблицы
    */
-  override def findAll(): Seq[SkillEntity] =
+  override def findAll(limit: Int = 100,
+                       offset: Int = 0,
+                       orderBy:String = "id",
+                       sort: String = "ASC"): Seq[SkillEntity] = {
+
+    val order = orderBy match {
+      case "id" => sqls"id"
+      case "name" => sqls"name"
+    }
+
+    val sortType = sort match {
+      case "ASC" => sqls"asc"
+      case "DESC" => sqls"desc"
+    }
+
     NamedDB(s"$dbName") readOnly { implicit session =>
       sql"""
         SELECT * FROM SKILL
+        ORDER BY $order $sortType
+        LIMIT $limit
+        OFFSET $offset
       """.map(skill => SkillEntity(
         UUID.fromString(skill.string("id")),
         skill.string("name"))
       ).collection.apply()
     }
+  }
 
   /**
    * Выполенение SQL запроса на получение конретной записи из таблицы Skill

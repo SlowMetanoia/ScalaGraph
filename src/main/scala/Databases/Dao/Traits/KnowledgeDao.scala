@@ -12,7 +12,10 @@ trait KnowledgeDao {
    * Получение всех Knowledge из таблицы
    * @return последовательность всех Knowledge из таблицы
    */
-  def findAll(): Seq[KnowledgeEntity]
+  def findAll(limit: Int = 100,
+              offset: Int = 0,
+              orderBy: String = "id",
+              sort: String = "ASC"): Seq[KnowledgeEntity]
 
   /**
    * Получение Knowledge из таблицы по id

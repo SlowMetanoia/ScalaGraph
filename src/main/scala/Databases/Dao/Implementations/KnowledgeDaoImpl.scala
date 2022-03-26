@@ -19,15 +19,33 @@ case class KnowledgeDaoImpl(dbName: String) extends KnowledgeDao {
    * Выполнение SQL запроса на получение всех записей из таблицы Knowledge
    * @return последовательность всех Knowledge из таблицы
    */
-  override def findAll(): Seq[KnowledgeEntity] =
+  override def findAll(limit: Int = 100,
+                       offset: Int = 0,
+                       orderBy:String = "id",
+                       sort: String = "ASC"): Seq[KnowledgeEntity] = {
+
+    val order = orderBy match {
+      case "id" => sqls"id"
+      case "name" => sqls"name"
+    }
+
+    val sortType = sort match {
+      case "ASC" => sqls"asc"
+      case "DESC" => sqls"desc"
+    }
+
     NamedDB(s"$dbName") readOnly { implicit session =>
       sql"""
         SELECT * FROM knowledge
+        ORDER BY $order $sortType
+        LIMIT $limit
+        OFFSET $offset
       """.map(knowledge => KnowledgeEntity(
         UUID.fromString(knowledge.string("id")),
         knowledge.string("name"))
       ).collection.apply()
     }
+  }
 
   /**
    * Выполенение SQL запроса на получение конретной записи из таблицы Knowledge

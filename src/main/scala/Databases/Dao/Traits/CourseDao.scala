@@ -12,7 +12,10 @@ trait CourseDao {
    * Получение всех Course из таблицы
    * @return последовательность всех Course из таблицы
    */
-  def findAll(): Seq[CourseEntity]
+  def findAll(limit: Int = 100,
+              offset: Int = 0,
+              orderBy: String = "id",
+              sort: String = "ASC"): Seq[CourseEntity]
 
   /**
    * Получение Course из таблицы по id

@@ -19,15 +19,33 @@ case class AbilityDaoImpl(dbName: String) extends AbilityDao {
    * Выполнение SQL запроса на получение всех записей из таблицы Ability
    * @return последовательность всех Ability из таблицы
    */
-  override def findAll(): Seq[AbilityEntity] =
+  override def findAll(limit: Int = 100,
+                       offset: Int = 0,
+                       orderBy:String = "id",
+                       sort: String = "ASC"): Seq[AbilityEntity] = {
+
+    val order = orderBy match {
+      case "id" => sqls"id"
+      case "name" => sqls"name"
+    }
+
+    val sortType = sort match {
+      case "ASC" => sqls"asc"
+      case "DESC" => sqls"desc"
+    }
+
     NamedDB(s"$dbName") readOnly { implicit session =>
       sql"""
         SELECT * FROM ability
+        ORDER BY $order $sortType
+        LIMIT $limit
+        OFFSET $offset
       """.map(ability => AbilityEntity(
         UUID.fromString(ability.string("id")),
         ability.string("name"))
       ).collection.apply()
     }
+  }
 
   /**
    * Выполенение SQL запроса на получение конретной записи из таблицы Ability

@@ -12,7 +12,10 @@ trait AbilityDao {
    * Получение всех Ability из таблицы
    * @return последовательность всех Ability из таблицы
    */
-  def findAll(): Seq[AbilityEntity]
+  def findAll(limit: Int = 100,
+              offset: Int = 0,
+              orderBy: String = "id",
+              sort: String = "ASC"): Seq[AbilityEntity]
 
   /**
    * Получение Ability из таблицы по id
