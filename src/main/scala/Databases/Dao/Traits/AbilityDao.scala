@@ -4,10 +4,38 @@ import Databases.Models.Dao.AbilityEntity
 
 import java.util.UUID
 
+/**
+ * Трейт DAO для entity Ability
+ * */
 trait AbilityDao {
+  /**
+   * Получение всех Ability из таблицы
+   * @return последовательность всех Ability из таблицы
+   */
   def findAll(): Seq[AbilityEntity]
+
+  /**
+   * Получение Ability из таблицы по id
+   * @param id Ability которую необходимо получить
+   * @return Optional с Ability если такая есть в БД, иначе Option.empty
+   */
   def findById(id: UUID): Option[AbilityEntity]
+
+  /**
+   * Вставка новой Ability в таблицу
+   * @param ability entity которуб необходимо вставить в таблицу
+   */
   def insert(ability: AbilityEntity): Unit
+
+  /**
+   * Удаление Ability из таблицы по id
+   * @param id Ability которую необходимо удалить
+   */
   def deleteById(id: UUID): Unit
+
+  /**
+   * Обновление Ability в таблице
+   * @param ability entity которое будет обновлено
+   */
   def update(ability: AbilityEntity): Unit
 }

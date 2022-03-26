@@ -2,6 +2,10 @@ package Databases.Models.Dao
 
 import java.util.UUID
 
+/**
+ * Класс сущностей Course соответсвующий таблице COURSE в БД
+ * Может содержать только поля
+ * */
 case class CourseEntity(
   id: UUID,
   name: String,

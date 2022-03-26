@@ -6,22 +6,50 @@ import scalikejdbc.{NamedDB, scalikejdbcSQLInterpolationImplicitDef}
 
 import java.util.UUID
 
+/**
+ * Реализация AbilityDao
+ * Выполнение SQL скриптов при работе с таблицой Ability и
+ * маппинг полученных данных в объекты класса AbilityEntity
+ * @see AbilityDao
+ * @see AbilityEntity
+ * */
 case class AbilityDaoImpl(dbName: String) extends AbilityDao {
+
+  /**
+   * Выполнение SQL запроса на получение всех записей из таблицы Ability
+   * @return последовательность всех Ability из таблицы
+   */
   override def findAll(): Seq[AbilityEntity] =
     NamedDB(s"$dbName") readOnly { implicit session =>
       sql"""
-        SELECT * FROM ABILITY
-      """.map(ability => AbilityEntity(UUID.fromString(ability.string("id")), ability.string("name"))).collection.apply()
+        SELECT * FROM ability
+      """.map(ability => AbilityEntity(
+        UUID.fromString(ability.string("id")),
+        ability.string("name"))
+      ).collection.apply()
     }
 
+  /**
+   * Выполенение SQL запроса на получение конретной записи из таблицы Ability
+   * по id
+   * @param id Ability которую необходимо получить
+   * @return Optional с Ability если такая есть в БД, иначе Option.empty
+   */
   override def findById(id: UUID): Option[AbilityEntity] =
     NamedDB(s"$dbName") readOnly { implicit session =>
       sql"""
         SELECT * FROM ABILITY
         WHERE id = $id
-      """.map(ability => AbilityEntity(UUID.fromString(ability.string("id")), ability.string("name"))).single.apply()
+      """.map(ability => AbilityEntity(
+        UUID.fromString(ability.string("id")),
+        ability.string("name"))
+      ).single.apply()
     }
 
+  /**
+   * Выполнение SQL запроса на вставку новой записи в таблицу Ability
+   * @param ability entity которую необходимо вставить в таблицу
+   */
   override def insert(ability: AbilityEntity): Unit =
     NamedDB(s"$dbName") localTx { implicit session =>
       sql"""
@@ -30,6 +58,10 @@ case class AbilityDaoImpl(dbName: String) extends AbilityDao {
       """.update.apply()
     }
 
+  /**
+   * Выполенение SQL запроса на удаление записи из таблицы Ability
+   * @param id Ability которую необходимо удалить
+   */
   override def deleteById(id: UUID): Unit =
     NamedDB(s"$dbName") localTx { implicit session =>
       sql"""
@@ -38,6 +70,10 @@ case class AbilityDaoImpl(dbName: String) extends AbilityDao {
       """.update.apply()
     }
 
+  /**
+   * Выполнение SQL запроса на обновление записи в таблице Ability
+   * @param ability entity которое будет обновлено
+   */
   override def update(ability: AbilityEntity): Unit =
     NamedDB(s"$dbName") localTx { implicit session =>
       sql"""
