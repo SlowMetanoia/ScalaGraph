@@ -27,15 +27,16 @@ case class CourseDaoImpl(dbName: String) extends CourseDao {
 
   /**
    * Выполнение SQL запроса на получение всех записей из таблицы Course
-   * @param limit - кол-во записей которые необходимо получить
-   * @param offset - отсутуп от начала полученных записей
+   *
+   * @param limit   - кол-во записей которые необходимо получить
+   * @param offset  - отсутуп от начала полученных записей
    * @param orderBy - поле по которому необходимо отсортировать записи
-   * @param sort - порядок сортировки
+   * @param sort    - порядок сортировки
    * @return последовательность всех Course из таблицы
    */
   override def findAll(limit: Int = 100,
                        offset: Int = 0,
-                       orderBy:String = "id",
+                       orderBy: String = "id",
                        sort: String = "ASC"): Seq[CourseEntity] = {
 
     val order = orderBy match {

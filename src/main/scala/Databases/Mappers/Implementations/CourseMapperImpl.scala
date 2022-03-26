@@ -5,9 +5,9 @@ import Databases.Models.Dao.CourseEntity
 import Databases.Models.Domain.Course
 
 case class CourseMapperImpl(
+  skillMapper: SkillMapper,
   abilityMapper: AbilityMapper,
   knowledgeMapper: KnowledgeMapper,
-  skillMapper: SkillMapper
 ) extends CourseMapper {
   /**
    * Перевод из CourseEntity в Course

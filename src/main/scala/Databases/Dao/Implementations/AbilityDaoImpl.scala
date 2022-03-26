@@ -10,6 +10,7 @@ import java.util.UUID
  * Реализация AbilityDao
  * Выполнение SQL скриптов при работе с таблицой Ability и
  * маппинг полученных данных в объекты класса AbilityEntity
+ *
  * @see AbilityDao
  * @see AbilityEntity
  * */
@@ -17,15 +18,16 @@ case class AbilityDaoImpl(dbName: String) extends AbilityDao {
 
   /**
    * Выполнение SQL запроса на получение всех записей из таблицы Ability
-   * @param limit - кол-во записей которые необходимо получить
-   * @param offset - отсутуп от начала полученных записей
+   *
+   * @param limit   - кол-во записей которые необходимо получить
+   * @param offset  - отсутуп от начала полученных записей
    * @param orderBy - поле по которому необходимо отсортировать записи
-   * @param sort - порядок сортировки
+   * @param sort    - порядок сортировки
    * @return последовательность всех Ability из таблицы
    */
   override def findAll(limit: Int = 100,
                        offset: Int = 0,
-                       orderBy:String = "id",
+                       orderBy: String = "id",
                        sort: String = "ASC"): Seq[AbilityEntity] = {
 
     val order = orderBy match {
@@ -54,6 +56,7 @@ case class AbilityDaoImpl(dbName: String) extends AbilityDao {
   /**
    * Выполенение SQL запроса на получение конретной записи из таблицы Ability
    * по id
+   *
    * @param id Ability которую необходимо получить
    * @return Optional с Ability если такая есть в БД, иначе Option.empty
    */
@@ -70,6 +73,7 @@ case class AbilityDaoImpl(dbName: String) extends AbilityDao {
 
   /**
    * Выполнение SQL запроса на вставку новой записи в таблицу Ability
+   *
    * @param ability entity которую необходимо вставить в таблицу
    */
   override def insert(ability: AbilityEntity): Unit =
@@ -82,6 +86,7 @@ case class AbilityDaoImpl(dbName: String) extends AbilityDao {
 
   /**
    * Выполенение SQL запроса на удаление записи из таблицы Ability
+   *
    * @param id Ability которую необходимо удалить
    */
   override def deleteById(id: UUID): Unit =
@@ -94,6 +99,7 @@ case class AbilityDaoImpl(dbName: String) extends AbilityDao {
 
   /**
    * Выполнение SQL запроса на обновление записи в таблице Ability
+   *
    * @param ability entity которое будет обновлено
    */
   override def update(ability: AbilityEntity): Unit =

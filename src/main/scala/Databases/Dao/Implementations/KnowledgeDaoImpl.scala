@@ -10,6 +10,7 @@ import java.util.UUID
  * Реализация KnowledgeDao
  * Выполнение SQL скриптов при работе с таблицой Knowledge и
  * маппинг полученных данных в объекты класса KnowledgeEntity
+ *
  * @see KnowledgeDao
  * @see KnowledgeEntity
  * */
@@ -17,15 +18,16 @@ case class KnowledgeDaoImpl(dbName: String) extends KnowledgeDao {
 
   /**
    * Выполнение SQL запроса на получение всех записей из таблицы Knowledge
-   * @param limit - кол-во записей которые необходимо получить
-   * @param offset - отсутуп от начала полученных записей
+   *
+   * @param limit   - кол-во записей которые необходимо получить
+   * @param offset  - отсутуп от начала полученных записей
    * @param orderBy - поле по которому необходимо отсортировать записи
-   * @param sort - порядок сортировки
+   * @param sort    - порядок сортировки
    * @return последовательность всех Knowledge из таблицы
    */
   override def findAll(limit: Int = 100,
                        offset: Int = 0,
-                       orderBy:String = "id",
+                       orderBy: String = "id",
                        sort: String = "ASC"): Seq[KnowledgeEntity] = {
 
     val order = orderBy match {
@@ -54,6 +56,7 @@ case class KnowledgeDaoImpl(dbName: String) extends KnowledgeDao {
   /**
    * Выполенение SQL запроса на получение конретной записи из таблицы Knowledge
    * по id
+   *
    * @param id Knowledge которую необходимо получить
    * @return Optional с Knowledge если такая есть в БД, иначе Option.empty
    */
@@ -70,6 +73,7 @@ case class KnowledgeDaoImpl(dbName: String) extends KnowledgeDao {
 
   /**
    * Выполнение SQL запроса на вставку новой записи в таблицу Knowledge
+   *
    * @param knowledge entity которую необходимо вставить в таблицу
    */
   override def insert(knowledge: KnowledgeEntity): Unit =
@@ -82,6 +86,7 @@ case class KnowledgeDaoImpl(dbName: String) extends KnowledgeDao {
 
   /**
    * Выполенение SQL запроса на удаление записи из таблицы Knowledge
+   *
    * @param id Knowledge которую необходимо удалить
    */
   override def deleteById(id: UUID): Unit =
@@ -94,6 +99,7 @@ case class KnowledgeDaoImpl(dbName: String) extends KnowledgeDao {
 
   /**
    * Выполнение SQL запроса на обновление записи в таблице Knowledge
+   *
    * @param knowledge entity которое будет обновлено
    */
   override def update(knowledge: KnowledgeEntity): Unit =

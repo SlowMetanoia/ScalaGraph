@@ -9,10 +9,10 @@ import java.util.UUID
  * */
 trait KnowledgeDao {
   /**
-   * @param limit - кол-во записей которые необходимо получить
-   * @param offset - отсутуп от начала полученных записей
+   * @param limit   - кол-во записей которые необходимо получить
+   * @param offset  - отсутуп от начала полученных записей
    * @param orderBy - поле по которому необходимо отсортировать записи
-   * @param sort - порядок сортировки
+   * @param sort    - порядок сортировки
    * @return последовательность всех Knowledge из таблицы
    */
   def findAll(limit: Int = 100,
@@ -22,6 +22,7 @@ trait KnowledgeDao {
 
   /**
    * Получение Knowledge из таблицы по id
+   *
    * @param id Knowledge которую необходимо получить
    * @return Optional с Knowledge если такая есть в БД, иначе Option.empty
    */
@@ -29,18 +30,21 @@ trait KnowledgeDao {
 
   /**
    * Вставка новой Knowledge в таблицу
+   *
    * @param knowledge entity которуб необходимо вставить в таблицу
    */
   def insert(knowledge: KnowledgeEntity): Unit
 
   /**
    * Удаление Knowledge из таблицы по id
+   *
    * @param id Knowledge которую необходимо удалить
    */
   def deleteById(id: UUID): Unit
 
   /**
    * Обновление Knowledge в таблице
+   *
    * @param knowledge entity которое будет обновлено
    */
   def update(knowledge: KnowledgeEntity): Unit

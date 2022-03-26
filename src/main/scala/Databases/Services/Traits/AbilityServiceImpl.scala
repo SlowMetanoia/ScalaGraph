@@ -2,12 +2,15 @@ package Databases.Services.Traits
 
 import Databases.Dao.Implementations.AbilityDaoImpl
 import Databases.Dao.Traits.AbilityDao
+import Databases.Mappers.Implementations.AbilityMapperImpl
+import Databases.Mappers.Traits.AbilityMapper
 import Databases.Models.Domain.Ability
 import Databases.Services.Implementations.AbilityService
 
 import java.util.UUID
 
 case class AbilityServiceImpl(dbname: String) extends AbilityService {
+  private val abilityMapper: AbilityMapper = AbilityMapperImpl()
   private val abilityDao: AbilityDao = AbilityDaoImpl(dbname)
 
   /**
@@ -19,7 +22,12 @@ case class AbilityServiceImpl(dbname: String) extends AbilityService {
    * @param sort    - порядок сортировки
    * @return последовательность всех Ability
    */
-  override def findAll(limit: Int, offset: Int, orderBy: String, sort: String): Seq[Ability] = ???
+  override def findAll(limit: Int = 100,
+                       offset: Int = 0,
+                       orderBy: String = "id",
+                       sort: String = "ASC"): Seq[Ability] =
+    abilityDao.findAll(limit, offset, orderBy, sort)
+      .map(ability => abilityMapper.mapToAbility(ability))
 
   /**
    * Получение Ability по id
@@ -27,26 +35,30 @@ case class AbilityServiceImpl(dbname: String) extends AbilityService {
    * @param id Ability которую необходимо получить
    * @return Optional с Ability если такая есть в БД, иначе Option.empty
    */
-  override def findById(id: UUID): Option[Ability] = ???
+  override def findById(id: UUID): Ability =
+    abilityMapper.mapToAbility(abilityDao.findById(id).get)
 
   /**
    * Вставка новой Ability
    *
    * @param ability entity которую необходимо вставить
    */
-override def insert(ability: Ability): Unit = ???
+  override def insert(ability: Ability): Unit =
+    abilityDao.insert(abilityMapper.mapToAbilityEntity(ability))
 
   /**
    * Удаление Ability по id
    *
    * @param id Ability которую необходимо удалить
    */
-  override def deleteById(id: UUID): Unit = ???
+  override def deleteById(id: UUID): Unit =
+    abilityDao.deleteById(id)
 
   /**
    * Обновление Ability
    *
    * @param ability которое будет обновлено
    */
-  override def update(ability: Ability): Unit = ???
+  override def update(ability: Ability): Unit =
+    abilityDao.update(abilityMapper.mapToAbilityEntity(ability))
 }
