@@ -16,10 +16,10 @@ case class AbilityServiceImpl(dbname: String) extends AbilityService {
   /**
    * Получение всех Ability
    *
-   * @param limit   - кол-во записей которые необходимо получить
-   * @param offset  - отсутуп от начала полученных записей
-   * @param orderBy - поле по которому необходимо отсортировать записи
-   * @param sort    - порядок сортировки
+   * @param limit кол-во записей которые необходимо получить
+   * @param offset отсутуп от начала полученных записей
+   * @param orderBy поле по которому необходимо отсортировать записи
+   * @param sort порядок сортировки
    * @return последовательность всех Ability
    */
   override def findAll(limit: Int = 100,
@@ -27,7 +27,7 @@ case class AbilityServiceImpl(dbname: String) extends AbilityService {
                        orderBy: String = "id",
                        sort: String = "ASC"): Seq[Ability] =
     abilityDao.findAll(limit, offset, orderBy, sort)
-      .map(ability => abilityMapper.mapToAbility(ability))
+      .map(ability => abilityMapper.abilityEntity2Ability(ability))
 
   /**
    * Получение Ability по id
@@ -35,16 +35,15 @@ case class AbilityServiceImpl(dbname: String) extends AbilityService {
    * @param id Ability которую необходимо получить
    * @return Optional с Ability если такая есть в БД, иначе Option.empty
    */
-  override def findById(id: UUID): Ability =
-    abilityMapper.mapToAbility(abilityDao.findById(id).get)
-
+  override def findById(id: UUID): Option[Ability] =
+      abilityDao.findById(id).map(abilityMapper.abilityEntity2Ability)
   /**
    * Вставка новой Ability
    *
    * @param ability entity которую необходимо вставить
    */
   override def insert(ability: Ability): Unit =
-    abilityDao.insert(abilityMapper.mapToAbilityEntity(ability))
+    abilityDao.insert(abilityMapper.ability2AbilityEntity(ability))
 
   /**
    * Удаление Ability по id
@@ -60,5 +59,5 @@ case class AbilityServiceImpl(dbname: String) extends AbilityService {
    * @param ability которое будет обновлено
    */
   override def update(ability: Ability): Unit =
-    abilityDao.update(abilityMapper.mapToAbilityEntity(ability))
+    abilityDao.update(abilityMapper.ability2AbilityEntity(ability))
 }

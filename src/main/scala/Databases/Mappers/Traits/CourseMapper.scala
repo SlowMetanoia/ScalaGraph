@@ -23,5 +23,5 @@ trait CourseMapper {
    * @param course - бизнес модель для перевода
    * @return полученная entity
    */
-  def mapToCourseEntity(course: Course): CourseEntity
+  def course2CourseEntity(course: Course): CourseEntity
 }

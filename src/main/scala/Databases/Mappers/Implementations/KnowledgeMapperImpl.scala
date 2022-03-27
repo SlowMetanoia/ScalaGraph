@@ -8,18 +8,18 @@ case class KnowledgeMapperImpl() extends KnowledgeMapper {
   /**
    * Перевод из KnowledgeEntity в Knowledge
    *
-   * @param knowledgeEntity - entity для перевода
+   * @param knowledgeEntity entity для перевода
    * @return полученная бизнес модель
    */
-  override def mapToKnowledge(knowledgeEntity: KnowledgeEntity): Knowledge =
+  override def knowledgeEntity2Knowledge(knowledgeEntity: KnowledgeEntity): Knowledge =
     Knowledge(knowledgeEntity.id, knowledgeEntity.name)
 
   /**
    * Перевод из Knowledge в KnowledgeEntity
    *
-   * @param knowledge - бизнес модель для перевода
+   * @param knowledge бизнес модель для перевода
    * @return полученная entity
    */
-  override def mapToKnowledgeEntity(knowledge: Knowledge): KnowledgeEntity =
+  override def knowledge2KnowledgeEntity(knowledge: Knowledge): KnowledgeEntity =
     KnowledgeEntity(knowledge.id, knowledge.name)
 }

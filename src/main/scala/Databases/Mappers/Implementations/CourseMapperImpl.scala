@@ -19,24 +19,12 @@ case class CourseMapperImpl(
     Course(
       id = courseEntity.id,
       name = courseEntity.name,
-
-      inputSkills = courseEntity.inputSkills.map(skill =>
-        skillMapper.mapToSkill(skill)),
-
-      outputSkills = courseEntity.outputSkills.map(skill =>
-        skillMapper.mapToSkill(skill)),
-
-      inputAbility = courseEntity.inputAbility.map(ability =>
-        abilityMapper.mapToAbility(ability)),
-
-      outputAbility = courseEntity.outputAbility.map(ability =>
-        abilityMapper.mapToAbility(ability)),
-
-      inputKnowledge = courseEntity.inputKnowledge.map(knowledge =>
-        knowledgeMapper.mapToKnowledge(knowledge)),
-
-      outputKnowledge = courseEntity.outputKnowledge.map(knowledge =>
-        knowledgeMapper.mapToKnowledge(knowledge))
+      inputSkills = courseEntity.inputSkills.map(skillMapper.skillEntity2Skill),
+      outputSkills = courseEntity.outputSkills.map(skillMapper.skillEntity2Skill),
+      inputAbility = courseEntity.inputAbility.map(abilityMapper.abilityEntity2Ability),
+      outputAbility = courseEntity.outputAbility.map(abilityMapper.abilityEntity2Ability),
+      inputKnowledge = courseEntity.inputKnowledge.map(knowledgeMapper.knowledgeEntity2Knowledge),
+      outputKnowledge = courseEntity.outputKnowledge.map(knowledgeMapper.knowledgeEntity2Knowledge)
     )
 
   /**
@@ -45,27 +33,15 @@ case class CourseMapperImpl(
    * @param course - бизнес модель для перевода
    * @return полученная entity
    */
-  override def mapToCourseEntity(course: Course): CourseEntity =
+  override def course2CourseEntity(course: Course): CourseEntity =
     CourseEntity(
       id = course.id,
       name = course.name,
-
-      inputSkills = course.inputSkills.map(skill =>
-        skillMapper.mapToSkillEntity(skill)),
-
-      outputSkills = course.outputSkills.map(skill =>
-        skillMapper.mapToSkillEntity(skill)),
-
-      inputAbility = course.inputAbility.map(ability =>
-        abilityMapper.mapToAbilityEntity(ability)),
-
-      outputAbility = course.outputAbility.map(ability =>
-        abilityMapper.mapToAbilityEntity(ability)),
-
-      inputKnowledge = course.inputKnowledge.map(knowledge =>
-        knowledgeMapper.mapToKnowledgeEntity(knowledge)),
-
-      outputKnowledge = course.outputKnowledge.map(knowledge =>
-        knowledgeMapper.mapToKnowledgeEntity(knowledge))
+      inputSkills = course.inputSkills.map(skillMapper.skill2SkillEntity),
+      outputSkills = course.outputSkills.map(skillMapper.skill2SkillEntity),
+      inputAbility = course.inputAbility.map(abilityMapper.ability2AbilityEntity),
+      outputAbility = course.outputAbility.map(abilityMapper.ability2AbilityEntity),
+      inputKnowledge = course.inputKnowledge.map(knowledgeMapper.knowledge2KnowledgeEntity),
+      outputKnowledge = course.outputKnowledge.map(knowledgeMapper.knowledge2KnowledgeEntity)
     )
 }

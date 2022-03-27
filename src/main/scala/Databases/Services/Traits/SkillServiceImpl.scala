@@ -16,10 +16,10 @@ case class SkillServiceImpl(dbname: String) extends SkillService {
   /**
    * Получение всех Skill
    *
-   * @param limit   - кол-во записей которые необходимо получить
-   * @param offset  - отсутуп от начала полученных записей
-   * @param orderBy - поле по которому необходимо отсортировать записи
-   * @param sort    - порядок сортировки
+   * @param limit кол-во записей которые необходимо получить
+   * @param offset отсутуп от начала полученных записей
+   * @param orderBy поле по которому необходимо отсортировать записи
+   * @param sort порядок сортировки
    * @return последовательность всех Skill
    */
   override def findAll(limit: Int = 100,
@@ -27,7 +27,7 @@ case class SkillServiceImpl(dbname: String) extends SkillService {
                        orderBy: String = "id",
                        sort: String = "ASC"): Seq[Skill] =
     skillDao.findAll(limit, offset, orderBy, sort)
-      .map(skill => skillMapper.mapToSkill(skill))
+      .map(skill => skillMapper.skillEntity2Skill(skill))
 
   /**
    * Получение Skill по id
@@ -35,8 +35,8 @@ case class SkillServiceImpl(dbname: String) extends SkillService {
    * @param id Skill которую необходимо получить
    * @return Optional с Skill если такая есть в БД, иначе Option.empty
    */
-  override def findById(id: UUID): Skill =
-    skillMapper.mapToSkill(skillDao.findById(id).get)
+  override def findById(id: UUID): Option[Skill] =
+    skillDao.findById(id).map(skillMapper.skillEntity2Skill)
 
   /**
    * Вставка новой Skill
@@ -44,7 +44,7 @@ case class SkillServiceImpl(dbname: String) extends SkillService {
    * @param skill entity которуб необходимо вставить в таблицу
    */
   override def insert(skill: Skill): Unit =
-    skillDao.insert(skillMapper.mapToSkillEntity(skill))
+    skillDao.insert(skillMapper.skill2SkillEntity(skill))
 
   /**
    * Удаление Skill по id
@@ -60,5 +60,5 @@ case class SkillServiceImpl(dbname: String) extends SkillService {
    * @param skill которое будет обновлено
    */
   override def update(skill: Skill): Unit =
-    skillDao.insert(skillMapper.mapToSkillEntity(skill))
+    skillDao.insert(skillMapper.skill2SkillEntity(skill))
 }

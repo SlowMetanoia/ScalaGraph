@@ -22,16 +22,15 @@ case class CourseDaoImpl(dbName: String) extends CourseDao {
   /**
    * Класс "заглушка" для промежуточного хранения id и имени курса
    */
-
   import CourseDaoImpl.CoursePlug
 
   /**
    * Выполнение SQL запроса на получение всех записей из таблицы Course
    *
-   * @param limit   - кол-во записей которые необходимо получить
-   * @param offset  - отсутуп от начала полученных записей
-   * @param orderBy - поле по которому необходимо отсортировать записи
-   * @param sort    - порядок сортировки
+   * @param limit    кол-во записей которые необходимо получить
+   * @param offset   отсутуп от начала полученных записей
+   * @param orderBy  поле по которому необходимо отсортировать записи
+   * @param sort     порядок сортировки
    * @return последовательность всех Course из таблицы
    */
   override def findAll(limit: Int = 100,
@@ -42,6 +41,7 @@ case class CourseDaoImpl(dbName: String) extends CourseDao {
     val order = orderBy match {
       case "id" => sqls"id"
       case "name" => sqls"name"
+      case _ => throw new IllegalArgumentException //TODO
     }
 
     val sortType = sort match {
@@ -192,6 +192,7 @@ case class CourseDaoImpl(dbName: String) extends CourseDao {
 
     //Если такой курс найден, то получаем его
     //входные-выходные знания, умения, навыки
+    //TODO with map
     if (coursePlugOpt.isDefined) {
       Option(
         CourseEntity(

@@ -20,10 +20,10 @@ case class CourseServiceImpl(dbname: String) extends CourseService {
   /**
    * Получение всех Course
    *
-   * @param limit   - кол-во записей которые необходимо получить
-   * @param offset  - отсутуп от начала полученных записей
-   * @param orderBy - поле по которому необходимо отсортировать записи
-   * @param sort    - порядок сортировки
+   * @param limit кол-во записей которые необходимо получить
+   * @param offset отсутуп от начала полученных записей
+   * @param orderBy поле по которому необходимо отсортировать записи
+   * @param sort порядок сортировки
    * @return последовательность всех Course
    */
   override def findAll(limit: Int = 100,
@@ -48,7 +48,7 @@ case class CourseServiceImpl(dbname: String) extends CourseService {
    * @param course entity которуб необходимо вставить в таблицу
    */
   override def insert(course: Course): Unit =
-    courseDao.insert(courseMapper.mapToCourseEntity(course))
+    courseDao.insert(courseMapper.course2CourseEntity(course))
 
   /**
    * Удаление Courseпо id
@@ -64,5 +64,5 @@ case class CourseServiceImpl(dbname: String) extends CourseService {
    * @param course entity которое будет обновлено
    */
   override def update(course: Course): Unit =
-    courseDao.update(courseMapper.mapToCourseEntity(course))
+    courseDao.update(courseMapper.course2CourseEntity(course))
 }

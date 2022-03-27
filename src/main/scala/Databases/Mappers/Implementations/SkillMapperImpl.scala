@@ -8,18 +8,18 @@ case class SkillMapperImpl() extends SkillMapper {
   /**
    * Перевод из SkillEntity в Skill
    *
-   * @param skillEntity - entity для перевода
+   * @param skillEntity entity для перевода
    * @return полученная бизнес модель
    */
-  override def mapToSkill(skillEntity: SkillEntity): Skill =
+  override def skillEntity2Skill(skillEntity: SkillEntity): Skill =
     Skill(skillEntity.id, skillEntity.name)
 
   /**
    * Перевод из Skill в SkillEntity
    *
-   * @param skill - бизнес модель для перевода
+   * @param skill бизнес модель для перевода
    * @return полученная entity
    */
-  override def mapToSkillEntity(skill: Skill): SkillEntity =
+  override def skill2SkillEntity(skill: Skill): SkillEntity =
     SkillEntity(skill.id, skill.name)
 }

@@ -14,10 +14,10 @@ case class KnowledgeServiceImpl(dbname: String) extends KnowledgeService {
   private val knowledgeDao: KnowledgeDao = KnowledgeDaoImpl(dbname)
 
   /**
-   * @param limit   - кол-во записей которые необходимо получить
-   * @param offset  - отсутуп от начала полученных записей
-   * @param orderBy - поле по которому необходимо отсортировать записи
-   * @param sort    - порядок сортировки
+   * @param limit кол-во записей которые необходимо получить
+   * @param offset отсутуп от начала полученных записей
+   * @param orderBy  поле по которому необходимо отсортировать записи
+   * @param sort  порядок сортировки
    * @return последовательность всех Knowledge
    */
   override def findAll(limit: Int = 100,
@@ -25,7 +25,7 @@ case class KnowledgeServiceImpl(dbname: String) extends KnowledgeService {
                        orderBy: String = "id",
                        sort: String = "ASC"): Seq[Knowledge] =
     knowledgeDao.findAll(limit, offset, orderBy, sort)
-      .map(knowledge => knowledgeMapper.mapToKnowledge(knowledge))
+      .map(knowledge => knowledgeMapper.knowledgeEntity2Knowledge(knowledge))
 
   /**
    * Получение Knowledge по id
@@ -33,8 +33,8 @@ case class KnowledgeServiceImpl(dbname: String) extends KnowledgeService {
    * @param id Knowledge которую необходимо получить
    * @return Optional с Knowledge если такая есть в БД, иначе Option.empty
    */
-  override def findById(id: UUID): Knowledge =
-    knowledgeMapper.mapToKnowledge(knowledgeDao.findById(id).get)
+  override def findById(id: UUID): Option[Knowledge] =
+    knowledgeDao.findById(id).map(knowledgeMapper.knowledgeEntity2Knowledge)
 
   /**
    * Вставка новой Knowledge
@@ -42,7 +42,7 @@ case class KnowledgeServiceImpl(dbname: String) extends KnowledgeService {
    * @param knowledge entity которую необходимо вставить
    */
   override def insert(knowledge: Knowledge): Unit =
-    knowledgeDao.insert(knowledgeMapper.mapToKnowledgeEntity(knowledge))
+    knowledgeDao.insert(knowledgeMapper.knowledge2KnowledgeEntity(knowledge))
 
   /**
    * Удаление Knowledge по id
@@ -58,5 +58,5 @@ case class KnowledgeServiceImpl(dbname: String) extends KnowledgeService {
    * @param knowledge entity которое будет обновлено
    */
   override def update(knowledge: Knowledge): Unit =
-    knowledgeDao.update(knowledgeMapper.mapToKnowledgeEntity(knowledge))
+    knowledgeDao.update(knowledgeMapper.knowledge2KnowledgeEntity(knowledge))
 }

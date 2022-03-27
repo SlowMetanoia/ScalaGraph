@@ -15,7 +15,7 @@ trait AbilityMapper {
    * @param abilityEntity - entity для перевода
    * @return полученная бизнес модель
    */
-  def mapToAbility(abilityEntity: AbilityEntity): Ability
+  def abilityEntity2Ability(abilityEntity: AbilityEntity): Ability
 
   /**
    * Перевод из Ability в AbilityEntity
@@ -23,5 +23,5 @@ trait AbilityMapper {
    * @param ability - бизнес модель для перевода
    * @return полученная entity
    */
-  def mapToAbilityEntity(ability: Ability): AbilityEntity
+  def ability2AbilityEntity(ability: Ability): AbilityEntity
 }

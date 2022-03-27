@@ -15,7 +15,7 @@ trait SkillMapper {
    * @param skillEntity - entity для перевода
    * @return полученная бизнес модель
    */
-  def mapToSkill(skillEntity: SkillEntity): Skill
+  def skillEntity2Skill(skillEntity: SkillEntity): Skill
 
   /**
    * Перевод из Skill в SkillEntity
@@ -23,5 +23,5 @@ trait SkillMapper {
    * @param skill - бизнес модель для перевода
    * @return полученная entity
    */
-  def mapToSkillEntity(skill: Skill): SkillEntity
+  def skill2SkillEntity(skill: Skill): SkillEntity
 }

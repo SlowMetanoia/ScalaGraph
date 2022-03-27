@@ -15,10 +15,10 @@ trait AbilityService {
   /**
    * Получение всех Ability
    *
-   * @param limit   - кол-во записей которые необходимо получить
-   * @param offset  - отсутуп от начала полученных записей
-   * @param orderBy - поле по которому необходимо отсортировать записи
-   * @param sort    - порядок сортировки
+   * @param limit кол-во записей которые необходимо получить
+   * @param offset отсутуп от начала полученных записей
+   * @param orderBy поле по которому необходимо отсортировать записи
+   * @param sort порядок сортировки
    * @return последовательность всех Ability
    */
   def findAll(limit: Int = 100,
@@ -32,7 +32,7 @@ trait AbilityService {
    * @param id Ability которую необходимо получить
    * @return Optional с Ability если такая есть в БД, иначе Option.empty
    */
-  def findById(id: UUID): Ability
+  def findById(id: UUID): Option[Ability]
 
   /**
    * Вставка новой Ability

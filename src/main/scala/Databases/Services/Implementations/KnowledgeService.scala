@@ -13,10 +13,10 @@ import java.util.UUID
  * */
 trait KnowledgeService {
   /**
-   * @param limit   - кол-во записей которые необходимо получить
-   * @param offset  - отсутуп от начала полученных записей
-   * @param orderBy - поле по которому необходимо отсортировать записи
-   * @param sort    - порядок сортировки
+   * @param limit кол-во записей которые необходимо получить
+   * @param offset отсутуп от начала полученных записей
+   * @param orderBy поле по которому необходимо отсортировать записи
+   * @param sort порядок сортировки
    * @return последовательность всех Knowledge
    */
   def findAll(limit: Int = 100,
@@ -30,7 +30,7 @@ trait KnowledgeService {
    * @param id Knowledge которую необходимо получить
    * @return Optional с Knowledge если такая есть в БД, иначе Option.empty
    */
-  def findById(id: UUID): Knowledge
+  def findById(id: UUID): Option[Knowledge]
 
   /**
    * Вставка новой Knowledge

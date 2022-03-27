@@ -15,10 +15,10 @@ trait SkillService {
   /**
    * Получение всех Skill
    *
-   * @param limit   - кол-во записей которые необходимо получить
-   * @param offset  - отсутуп от начала полученных записей
-   * @param orderBy - поле по которому необходимо отсортировать записи
-   * @param sort    - порядок сортировки
+   * @param limit кол-во записей которые необходимо получить
+   * @param offset отсутуп от начала полученных записей
+   * @param orderBy поле по которому необходимо отсортировать записи
+   * @param sort порядок сортировки
    * @return последовательность всех Skill
    */
   def findAll(limit: Int = 100,
@@ -32,7 +32,7 @@ trait SkillService {
    * @param id Skill которую необходимо получить
    * @return Optional с Skill если такая есть в БД, иначе Option.empty
    */
-  def findById(id: UUID): Skill
+  def findById(id: UUID): Option[Skill]
 
   /**
    * Вставка новой Skill
