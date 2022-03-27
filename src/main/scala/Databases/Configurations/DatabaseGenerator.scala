@@ -3,13 +3,10 @@ package Databases.Configurations
 import Databases.Dao.Implementations.{AbilityDaoImpl, CourseDaoImpl, KnowledgeDaoImpl, SkillDaoImpl}
 import Databases.Dao.Traits.{AbilityDao, CourseDao, KnowledgeDao, SkillDao}
 import Databases.Models.Dao.{AbilityEntity, CourseEntity, KnowledgeEntity, SkillEntity}
-import Databases.Models.Domain.Skill
 import scalikejdbc.{NamedDB, scalikejdbcSQLInterpolationImplicitDef}
 
 import java.util.UUID
 import scala.annotation.tailrec
-import scala.collection.mutable.ListBuffer
-import scala.util
 import scala.util.Random
 
 /**
@@ -185,67 +182,95 @@ class DatabaseGenerator(val dbname: String) {
     for (i <- 1 to Random.between(interval._1, interval._2))
       knowledgeDao.insert(KnowledgeEntity(UUID.randomUUID(), s"Знание$i"))
 
-  def generateCourse(interval: (Int, Int )): Unit = {
-    val skills = skillDao.findAll(1000)
-    val ability = abilityDao.findAll(1000)
-    val knowledge = knowledgeDao.findAll(1000)
+  def generateCourse(courseInterval: (Int, Int ),
+                     inputSkillInterval: (Int, Int),
+                     outputSkillInterval: (Int, Int),
+                     inputAbilityInterval: (Int, Int),
+                     outputAbilityInterval: (Int, Int),
+                     inputKnowledgeInterval: (Int, Int),
+                     outputKnowledgeInterval: (Int, Int)): Unit = {
+    val numberOfCourses = Random.between(courseInterval._1, courseInterval._2)
 
-    for (i <- 1 to Random.between(interval._1, interval._2))
+    val inputNumberOfSkills = Random.between(inputSkillInterval._1, inputSkillInterval._2)
+    val outputNumberOfSkills = Random.between(outputSkillInterval._1, outputSkillInterval._2)
+
+    val inputNumberOfAbility = Random.between(inputAbilityInterval._1, inputAbilityInterval._2)
+    val outputNumberOfAbility = Random.between(outputAbilityInterval._1, outputAbilityInterval._2)
+
+    val inputNumberOfKnowledge = Random.between(inputKnowledgeInterval._1, inputKnowledgeInterval._2)
+    val outputNumberOfKnowledge = Random.between(outputKnowledgeInterval._1, outputKnowledgeInterval._2)
+
+    val sakAVG = {
+      Seq(inputNumberOfSkills, outputNumberOfSkills,
+        inputNumberOfAbility, outputNumberOfAbility,
+        inputNumberOfKnowledge, outputNumberOfKnowledge)
+        .foldLeft((0, 1)) {
+          case ((avg, idx), next) => (avg + (next - avg)/idx, idx + 1)
+        }._1}
+
+    val skills = skillDao.findAll(numberOfCourses * sakAVG)
+    val ability = abilityDao.findAll(numberOfCourses * sakAVG)
+    val knowledge = knowledgeDao.findAll(numberOfCourses * sakAVG)
+
+    for (i <- 1 to Random.between(courseInterval._1, courseInterval._2))
       courseDao.insert(CourseEntity(
         id = UUID.randomUUID(),
         name = s"КУРС$i",
 
-        inputSkills = a(skills),
-        outputSkills = a(skills),
+        inputSkills = uniqueSkills(skills, inputNumberOfSkills),
+        outputSkills = uniqueSkills(skills, outputNumberOfSkills),
 
-        inputAbility = r(ability),
-        outputAbility = r(ability),
+        inputAbility = uniqueAbilities(ability, inputNumberOfAbility),
+        outputAbility = uniqueAbilities(ability, outputNumberOfAbility),
 
-        inputKnowledge = b(knowledge),
-        outputKnowledge = b (knowledge)
+        inputKnowledge = uniqueKnowledge(knowledge, inputNumberOfKnowledge),
+        outputKnowledge = uniqueKnowledge(knowledge, outputNumberOfKnowledge)
       ))
   }
 
-  def a(skills: Seq[SkillEntity]): Seq[SkillEntity] = {
-    val b = skills.to(ListBuffer)
-    val res = new ListBuffer[SkillEntity]
+  def uniqueSkills(skills: Seq[SkillEntity], quantity: Int): Seq[SkillEntity] = {
+    val res = Seq.empty[SkillEntity]
 
-    for (i <- 0 to Random.between(3, 7)) {
-      val c = b(i)
-      res += c
-      b -= c
+    @tailrec
+    def step(skills: Seq[SkillEntity], res: Seq[SkillEntity], quantity: Int): Seq[SkillEntity] = {
+      if (quantity == 0) return res
+      val skill = skills(Random.between(0, skills.length))
+      step(skills.filter(x => x != skill), res :+ skill, quantity - 1)
     }
 
-    res.toSeq
+    step(skills, res, quantity)
   }
 
-  def r(abilitys: Seq[AbilityEntity]): Seq[AbilityEntity] = {
-    val b = abilitys.to(ListBuffer)
-    val res = new ListBuffer[AbilityEntity]
+  def uniqueAbilities(abilities: Seq[AbilityEntity], quantity: Int): Seq[AbilityEntity] = {
+    val res = Seq.empty[AbilityEntity]
 
-    for (i <- 0 to Random.between(3, 7)) {
-      val c = b(i)
-      res += c
-      b -= c
+    @tailrec
+    def step(abilities: Seq[AbilityEntity], res: Seq[AbilityEntity], quantity: Int): Seq[AbilityEntity] = {
+      if (quantity == 0) return res
+      val ability = abilities(Random.between(0, abilities.length))
+      step(abilities.filter(x => x != ability), res :+ ability, quantity - 1)
     }
 
-    res.toSeq
+    step(abilities, res, quantity)
   }
 
-  def b(knowledges: Seq[KnowledgeEntity]): Seq[KnowledgeEntity] = {
-    val b = knowledges.to(ListBuffer)
-    val res = new ListBuffer[KnowledgeEntity]
+  def uniqueKnowledge(knowledge: Seq[KnowledgeEntity], quantity: Int): Seq[KnowledgeEntity] = {
+    val res = Seq.empty[KnowledgeEntity]
 
-    for (i <- 0 to Random.between(3, 7)) {
-      val c = b(i)
-      res += c
-      b -= c
+    @tailrec
+    def step(knowledge: Seq[KnowledgeEntity], res: Seq[KnowledgeEntity], quantity: Int): Seq[KnowledgeEntity] = {
+      if (quantity == 0) return res
+      val know = knowledge(Random.between(0, knowledge.length))
+      step(knowledge.filter(x => x != know), res :+ know, quantity - 1)
     }
 
-    res.toSeq
+    step(knowledge, res, quantity)
   }
 }
 
-object DatabaseGenerator {
-  Random.between(10, 20)
+
+object A {
+  var dbname: String = ""
+
+
 }

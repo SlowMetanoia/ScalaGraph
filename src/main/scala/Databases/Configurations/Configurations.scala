@@ -1,11 +1,7 @@
 package Databases.Configurations
 
-import Databases.Dao.Implementations.SkillDaoImpl
-import Databases.Services.Implementations.{AbilityService, CourseService, KnowledgeService, SkillService}
-import Databases.Services.Traits.{AbilityServiceImpl, CourseServiceImpl, KnowledgeServiceImpl, SkillServiceImpl}
+import Databases.Services.Traits.CourseServiceImpl
 import scalikejdbc.config.DBs
-
-import scala.util.Random
 
 /**
  * Конфигурация подключений к БД.
@@ -17,27 +13,26 @@ import scala.util.Random
 object Configurations extends App {
   DBs.setupAll()
 
-  val skillDao = SkillDaoImpl("tetrahedral")
-//  val skillService: SkillService = SkillServiceImpl("horizontal")
-//  val abilityService: AbilityService = AbilityServiceImpl("horizontal")
-//  val knowledgeService: KnowledgeService = KnowledgeServiceImpl("horizontal")
-//  val courseService: CourseService = CourseServiceImpl("horizontal")
-//
-//  println(skillService.findAll())
-//  println(abilityService.findAll())
-//  println(knowledgeService.findAll())
-//  println(courseService.findAll())
+  val dbGenerator = new DatabaseGenerator("tetrahedral")
 
-  val dbGen = new DatabaseGenerator("tetrahedral")
-//  dbGen.dropDatabase()
-//  dbGen.createDatabase()
+//  dbGenerator.dropDatabase()
+//  dbGenerator.createDatabase()
 
-//  val a = Random.between(10, 20)
-//  dbGen.generateSkill(10, 20)
-//  dbGen.generateAbility(10, 20)
-//  dbGen.generateKnowledge(10, 20)
-  dbGen.generateCourse(2, 7)
-//
-//  val skills = skillDao.findAll()
-//  println(dbGen.getSeq(skills))
+//  dbGenerator.generateSkill(100, 200)
+//  dbGenerator.generateAbility(100, 200)
+//  dbGenerator.generateKnowledge(100, 200)
+
+//  dbGenerator.generateCourse(
+//    (60, 90),
+//    (3,5),
+//    (2,6),
+//    (4,7),
+//    (2,5),
+//    (4,6),
+//    (3, 5)
+//  )
+
+  val courseDao = CourseServiceImpl("tetrahedral")
+  println(courseDao.findAll())
+
 }
