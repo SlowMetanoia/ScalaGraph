@@ -1,6 +1,7 @@
 package Databases.Configurations
 
-import Databases.Services.Traits.CourseServiceImpl
+import Databases.Dao.Implementations.{AbilityDaoImpl, CourseDaoImpl, KnowledgeDaoImpl, SkillDaoImpl}
+import Databases.Dao.Traits.{AbilityDao, CourseDao, KnowledgeDao, SkillDao}
 import scalikejdbc.config.DBs
 
 /**
@@ -13,26 +14,28 @@ import scalikejdbc.config.DBs
 object Configurations extends App {
   DBs.setupAll()
 
-  val dbGenerator = new DatabaseGenerator("tetrahedral")
+  private val horizontal = "horizontal"
+  private val tetrahedral = "tetrahedral"
+  private val reticulated = "reticulated"
 
-//  dbGenerator.dropDatabase()
-//  dbGenerator.createDatabase()
+//  val dbManager = new DatabaseManager(horizontal)
+//
+//  val skills = DataGenerator.generateSkill(350, 400)
+//  val abilities= DataGenerator.generateAbility(350, 400)
+//  val knowledge = DataGenerator.generateKnowledge(350, 400)
+//
+//  val courses = DataGenerator.generateCourse((270, 320), (4, 7), skills, abilities, knowledge)
+//
+//  dbManager.dropAllTables()
+//  dbManager.createAllTables()
+//  dbManager.fillSkillTable(skills)
+//  dbManager.fillAbilityTable(abilities)
+//  dbManager.fillKnowledgeTable(knowledge)
+//  dbManager.fillCourseTable(courses)
 
-//  dbGenerator.generateSkill(100, 200)
-//  dbGenerator.generateAbility(100, 200)
-//  dbGenerator.generateKnowledge(100, 200)
+  val courseDao = CourseDaoImpl(horizontal)
+  val courses = courseDao.findAll(500)
 
-//  dbGenerator.generateCourse(
-//    (60, 90),
-//    (3,5),
-//    (2,6),
-//    (4,7),
-//    (2,5),
-//    (4,6),
-//    (3, 5)
-//  )
-
-  val courseDao = CourseServiceImpl("tetrahedral")
-  println(courseDao.findAll())
-
+  println(courses)
+  println(courses.length)
 }

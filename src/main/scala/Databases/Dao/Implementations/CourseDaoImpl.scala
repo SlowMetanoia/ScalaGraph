@@ -2,6 +2,7 @@ package Databases.Dao.Implementations
 
 import Databases.Dao.Traits.CourseDao
 import Databases.Models.Dao.{AbilityEntity, CourseEntity, KnowledgeEntity, SkillEntity}
+import scalikejdbc.interpolation.SQLSyntax
 import scalikejdbc.{NamedDB, scalikejdbcSQLInterpolationImplicitDef}
 
 import java.util.UUID
@@ -37,24 +38,12 @@ case class CourseDaoImpl(dbName: String) extends CourseDao {
                        offset: Int = 0,
                        orderBy: String = "id",
                        sort: String = "ASC"): Seq[CourseEntity] = {
-
-    val order = orderBy match {
-      case "id" => sqls"id"
-      case "name" => sqls"name"
-      case _ => throw new IllegalArgumentException //TODO
-    }
-
-    val sortType = sort match {
-      case "ASC" => sqls"asc"
-      case "DESC" => sqls"desc"
-    }
-
     //Из таблицы Course получаем id и имя
     val coursePlugs: Seq[CoursePlug] = {
       NamedDB(s"$dbName") readOnly { implicit session =>
         sql"""
           SELECT * FROM course
-          ORDER BY $order $sortType
+          ORDER BY ${SQLSyntax.createUnsafely(orderBy)} ${SQLSyntax.createUnsafely(sort)}
           LIMIT $limit
           OFFSET $offset
         """.map(course => CoursePlug(

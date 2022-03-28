@@ -12,7 +12,7 @@ case class CourseMapperImpl(
   /**
    * Перевод из CourseEntity в Course
    *
-   * @param courseEntity - entity для перевода
+   * @param courseEntity entity для перевода
    * @return полученная бизнес модель
    */
   override def mapToCourse(courseEntity: CourseEntity): Course =
@@ -30,7 +30,7 @@ case class CourseMapperImpl(
   /**
    * Перевод из Course в CourseEntity
    *
-   * @param course - бизнес модель для перевода
+   * @param course бизнес модель для перевода
    * @return полученная entity
    */
   override def course2CourseEntity(course: Course): CourseEntity =

@@ -2,6 +2,7 @@ package Databases.Dao.Implementations
 
 import Databases.Dao.Traits.AbilityDao
 import Databases.Models.Dao.AbilityEntity
+import scalikejdbc.interpolation.SQLSyntax
 import scalikejdbc.{NamedDB, scalikejdbcSQLInterpolationImplicitDef}
 
 import java.util.UUID
@@ -29,21 +30,10 @@ case class AbilityDaoImpl(dbName: String) extends AbilityDao {
                        offset: Int = 0,
                        orderBy: String = "id",
                        sort: String = "ASC"): Seq[AbilityEntity] = {
-
-    val order = orderBy match {
-      case "id" => sqls"id"
-      case "name" => sqls"name"
-    }
-
-    val sortType = sort match {
-      case "ASC" => sqls"asc"
-      case "DESC" => sqls"desc"
-    }
-
     NamedDB(s"$dbName") readOnly { implicit session =>
       sql"""
         SELECT * FROM ability
-        ORDER BY $order $sortType
+        ORDER BY ${SQLSyntax.createUnsafely(orderBy)} ${SQLSyntax.createUnsafely(sort)}
         LIMIT $limit
         OFFSET $offset
       """.map(ability => AbilityEntity(

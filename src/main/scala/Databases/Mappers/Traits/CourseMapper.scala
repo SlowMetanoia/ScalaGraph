@@ -12,7 +12,7 @@ trait CourseMapper {
   /**
    * Перевод из CourseEntity в Course
    *
-   * @param courseEntity - entity для перевода
+   * @param courseEntity entity для перевода
    * @return полученная бизнес модель
    */
   def mapToCourse(courseEntity: CourseEntity): Course
@@ -20,7 +20,7 @@ trait CourseMapper {
   /**
    * Перевод из Course в CourseEntity
    *
-   * @param course - бизнес модель для перевода
+   * @param course бизнес модель для перевода
    * @return полученная entity
    */
   def course2CourseEntity(course: Course): CourseEntity

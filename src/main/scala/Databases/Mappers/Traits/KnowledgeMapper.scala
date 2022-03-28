@@ -12,7 +12,7 @@ trait KnowledgeMapper {
   /**
    * Перевод из KnowledgeEntity в Knowledge
    *
-   * @param knowledgeEntity - entity для перевода
+   * @param knowledgeEntity entity для перевода
    * @return полученная бизнес модель
    */
   def knowledgeEntity2Knowledge(knowledgeEntity: KnowledgeEntity): Knowledge
@@ -20,7 +20,7 @@ trait KnowledgeMapper {
   /**
    * Перевод из Knowledge в KnowledgeEntity
    *
-   * @param knowledge - бизнес модель для перевода
+   * @param knowledge бизнес модель для перевода
    * @return полученная entity
    */
   def knowledge2KnowledgeEntity(knowledge: Knowledge): KnowledgeEntity

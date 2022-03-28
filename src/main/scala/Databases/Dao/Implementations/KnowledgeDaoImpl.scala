@@ -2,6 +2,7 @@ package Databases.Dao.Implementations
 
 import Databases.Dao.Traits.KnowledgeDao
 import Databases.Models.Dao.KnowledgeEntity
+import scalikejdbc.interpolation.SQLSyntax
 import scalikejdbc.{NamedDB, scalikejdbcSQLInterpolationImplicitDef}
 
 import java.util.UUID
@@ -30,20 +31,10 @@ case class KnowledgeDaoImpl(dbName: String) extends KnowledgeDao {
                        orderBy: String = "id",
                        sort: String = "ASC"): Seq[KnowledgeEntity] = {
 
-    val order = orderBy match {
-      case "id" => sqls"id"
-      case "name" => sqls"name"
-    }
-
-    val sortType = sort match {
-      case "ASC" => sqls"asc"
-      case "DESC" => sqls"desc"
-    }
-
     NamedDB(s"$dbName") readOnly { implicit session =>
       sql"""
         SELECT * FROM knowledge
-        ORDER BY $order $sortType
+        ORDER BY ${SQLSyntax.createUnsafely(orderBy)} ${SQLSyntax.createUnsafely(sort)}
         LIMIT $limit
         OFFSET $offset
       """.map(knowledge => KnowledgeEntity(

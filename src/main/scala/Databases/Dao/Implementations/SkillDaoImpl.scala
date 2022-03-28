@@ -2,7 +2,7 @@ package Databases.Dao.Implementations
 
 import Databases.Dao.Traits.SkillDao
 import Databases.Models.Dao.SkillEntity
-import scalikejdbc.{NamedDB, scalikejdbcSQLInterpolationImplicitDef}
+import scalikejdbc.{NamedDB, SQLSyntax, scalikejdbcSQLInterpolationImplicitDef}
 
 import java.util.UUID
 
@@ -30,20 +30,10 @@ case class SkillDaoImpl(dbName: String) extends SkillDao {
                        orderBy: String = "id",
                        sort: String = "ASC"): Seq[SkillEntity] = {
 
-    val order = orderBy match {
-      case "id" => sqls"id"
-      case "name" => sqls"name"
-    }
-
-    val sortType = sort match {
-      case "ASC" => sqls"asc"
-      case "DESC" => sqls"desc"
-    }
-
     NamedDB(s"$dbName") readOnly { implicit session =>
       sql"""
         SELECT * FROM SKILL
-        ORDER BY $order $sortType
+        ORDER BY ${SQLSyntax.createUnsafely(orderBy)} ${SQLSyntax.createUnsafely(sort)}
         LIMIT $limit
         OFFSET $offset
       """.map(skill => SkillEntity(
