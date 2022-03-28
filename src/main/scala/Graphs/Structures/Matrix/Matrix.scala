@@ -1,4 +1,4 @@
-package Graphs.Matrix
+package Graphs.Structures.Matrix
 
 trait Matrix[ T ] {
   def matrix: Seq[ Seq[ T ] ]

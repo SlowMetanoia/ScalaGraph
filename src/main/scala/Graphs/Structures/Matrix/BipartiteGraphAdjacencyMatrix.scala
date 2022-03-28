@@ -1,41 +1,49 @@
-package Graphs.Matrix
+package Graphs.Structures.Matrix
 
 import Graphs.Algorithms.SeqCartesianProduct
 
 
-case class BipartiteGraphAdjacencyMatrix( private val left:RectangleMatrix[Boolean], private val right:RectangleMatrix[Boolean]) extends Matrix[Boolean] {
-  import Graphs.Matrix.BipartiteGraphAdjacencyMatrix._
+case
+class BipartiteGraphAdjacencyMatrix( private val left: RectangleMatrix[ Boolean ], private val
+right: RectangleMatrix[ Boolean ] ) extends Matrix[ Boolean ] {
   
-  override def apply( i: Int ): Seq[ Boolean ] = i match {
-    case i if leftLimits.rowLim(i)  => left(i - leftLimits.rowLim.l) ++ new Array(right.size._2)
+  import Graphs.Structures.Matrix.BipartiteGraphAdjacencyMatrix._
+  
+  override
+  def apply( i: Int ): Seq[ Boolean ] = i match {
+    case i if leftLimits.rowLim(i) => left(i - leftLimits.rowLim.l) ++ new Array(right.size._2)
     case i if rightLimits.rowLim(i) => new Array(left.size._2) ++ right(i)
     case _ => throw new IndexOutOfBoundsException
   }
-  override def apply( i: Int, j: Int ): Boolean = (i,j) match {
-    case (i,j) if leftLimits(i,j)  => left (i - leftLimits.rowLim.l)(j)
-    case (i,j) if rightLimits(i,j) => right(i)(j - rightLimits.colLim.l)
+  
+  override
+  def apply( i: Int, j: Int ): Boolean = (i, j) match {
+    case (i, j) if leftLimits(i, j) => left(i - leftLimits.rowLim.l)(j)
+    case (i, j) if rightLimits(i, j) => right(i)(j - rightLimits.colLim.l)
     case _ => false
   }
-  override def matrix: Seq[ Seq[ Boolean ] ] = indices._1.map(i=>indices._2.map(j=> apply(i,j)))
+  
+  override def matrix: Seq[ Seq[ Boolean ] ] = indices._1.map(i => indices._2.map(j => apply(i, j)))
+  
   /**
    * Размеры матрицы
    */
   override
-  val size: (Int, Int) = (left.size._1 + right.size._1,left.size._2 + right.size._2)
+  val size: (Int, Int) = (left.size._1 + right.size._1, left.size._2 + right.size._2)
   
-  val leftLimits:Limits = Limits(
-    rowLim = Limit(right.size._1,size._1),
-    colLim = Limit(0,left.size._2)
-  )
-  val rightLimits:Limits = Limits(
-    rowLim = Limit(0,right.size._1),
-    colLim = Limit(left.size._2,size._2)
+  val leftLimits: Limits = Limits(
+    rowLim = Limit(right.size._1, size._1),
+    colLim = Limit(0, left.size._2)
+    )
+  val rightLimits: Limits = Limits(
+    rowLim = Limit(0, right.size._1),
+    colLim = Limit(left.size._2, size._2)
     )
   /**
    * Индексы матрицы
    */
   override
-  val indices: (Seq[ Int ], Seq[ Int ]) = (0 until size._1,0 until size._2)
+  val indices: (Seq[ Int ], Seq[ Int ]) = (0 until size._1, 0 until size._2)
   
   /**
    * Преобразование для печати
@@ -59,7 +67,7 @@ case class BipartiteGraphAdjacencyMatrix( private val left:RectangleMatrix[Boole
    * @return столбец матрицы
    */
   override
-  def col( j: Int ): Seq[ Boolean ] = indices._1.map(i=> apply(i,j))
+  def col( j: Int ): Seq[ Boolean ] = indices._1.map(i => apply(i, j))
   
   /**
    * map обыкновенный
@@ -105,13 +113,18 @@ case class BipartiteGraphAdjacencyMatrix( private val left:RectangleMatrix[Boole
   
   override def flatten: Seq[ Boolean ] = matrix.flatten
 }
-object BipartiteGraphAdjacencyMatrix{
-  case class Limit(l:Int,r:Int){
-    def apply(value:Int):Boolean = value >= l && value < r
+
+object BipartiteGraphAdjacencyMatrix {
+  case
+  class Limit( l: Int, r: Int ) {
+    def apply( value: Int ): Boolean = value >= l && value < r
   }
-  case class Limits(rowLim:Limit,colLim:Limit) {
-    def apply(i:Int,j:Int): Boolean = rowLim(i) && colLim(j)
+  
+  case
+  class Limits( rowLim: Limit, colLim: Limit ) {
+    def apply( i: Int, j: Int ): Boolean = rowLim(i) && colLim(j)
   }
+  
   def fromSlices(
                   size: Int,
                   delimiter: Int,

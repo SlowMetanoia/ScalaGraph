@@ -1,6 +1,6 @@
 package Graphs
 
-import Graphs.Matrix.RectangleMatrix
+import Graphs.Structures.Matrix.RectangleMatrix
 
 import scala.Array.ofDim
 

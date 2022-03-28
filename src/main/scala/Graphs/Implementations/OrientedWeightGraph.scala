@@ -1,8 +1,8 @@
 package Graphs.Implementations
 
 import Graphs.Algorithms.GraphTraverser
+import Graphs.Structures.Matrix.RectangleMatrix
 import Graphs.{ IGraph, IWeightedIGraph }
-import Graphs.Matrix.RectangleMatrix
 
 import scala.Array.ofDim
 
@@ -38,7 +38,7 @@ case class OrientedWeightGraph( weightMatrix:RectangleMatrix[Int]) extends IGrap
    *
    * @return Матрица, где по индексам (i,j) лежит true, если существует ребро из i в j
    */
-  override val adjacencyMatrix = (i:Int,j:Int)=>
+  override val adjacencyMatrix: (Int, Int) => Boolean = ( i:Int, j:Int)=>
       weightMatrix(i,j) > 0
 
 

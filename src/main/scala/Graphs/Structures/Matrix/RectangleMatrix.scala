@@ -1,4 +1,4 @@
-package Graphs.Matrix
+package Graphs.Structures.Matrix
 
 import Printers.Printable
 

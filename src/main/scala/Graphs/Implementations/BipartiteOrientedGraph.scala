@@ -2,31 +2,38 @@
 package Graphs.Implementations
 
 import Graphs.Algorithms.GraphTraverser
-import Graphs.Matrix.{ BipartiteGraphAdjacencyMatrix, RectangleMatrix }
+import Graphs.Structures.Matrix.BipartiteGraphAdjacencyMatrix
 import Graphs._
 
 /**
  * Рeализация двудольного орграфа
+ *
  * @param bipartiteAdjacencyMatrix даёт интерфейс матрицы смежности
  */
-case class BipartiteOrientedGraph( bipartiteAdjacencyMatrix:BipartiteGraphAdjacencyMatrix) extends IGraph[Boolean] {
+case
+class BipartiteOrientedGraph( bipartiteAdjacencyMatrix: BipartiteGraphAdjacencyMatrix ) extends IGraph[ Boolean ] {
   
   /**
-   * Матрица инцидентности графа
+   * @param source   номер 1-ой вершины
    *
-   * @return Матрица, где по индексам (i,j) лежит true, если i-тому ребру инцидентна j-ая вершина
-   */
-  def incidenceMatrix: RectangleMatrix[ Boolean ] = ???
-  
-  
-  
-  /**
-   * Матрица доступности
+   * @param receiver номер 2-ой вершины
    *
-   * @return Матрица, где по индексам (i,j) лежит true, если существует путь из i в j
+   * @return true если существует ребро между source и receiver иначе false
    */
   override
-  def availabilityMatrix: RectangleMatrix[ Boolean ] = ???
+  def hasEdge( source: Int, receiver: Int ): Boolean = bipartiteAdjacencyMatrix(source, receiver)
+  
+  override def indices: (Seq[ Int ], Seq[ Int ]) = bipartiteAdjacencyMatrix.indices
+  
+  /**
+   * Матрица смежности графа
+   *
+   * @return Матрица, где по индексам (i,j) лежит true, если существует ребро из i в j
+   */
+  override
+  val adjacencyMatrix: (Int, Int) => Boolean = bipartiteAdjacencyMatrix(_, _)
+  
+  override def size: (Int, Int) = bipartiteAdjacencyMatrix.size
   
   /**
    * Подграф.
@@ -37,34 +44,13 @@ case class BipartiteOrientedGraph( bipartiteAdjacencyMatrix:BipartiteGraphAdjace
    */
   override
   def subgraph( nodes: Seq[ Int ] ): IGraph[ Boolean ] = ???
-  
-  /**
-   * @param source   номер 1-ой вершины
-   *
-   * @param receiver номер 2-ой вершины
-   *
-   * @return true если существует ребро между source и receiver иначе false
-   */
-  override
-  def hasEdge( source: Int, receiver: Int ): Boolean = bipartiteAdjacencyMatrix(source,receiver)
-  
-  override def indices: (Seq[ Int ], Seq[ Int ]) = bipartiteAdjacencyMatrix.indices
-  
-  /**
-   * Матрица смежности графа
-   *
-   * @return Матрица, где по индексам (i,j) лежит true, если существует ребро из i в j
-   */
-  override
-  val adjacencyMatrix: (Int, Int) => Boolean = bipartiteAdjacencyMatrix(_,_)
-  
-  override def size: (Int, Int) = bipartiteAdjacencyMatrix.size
 }
-object BipartiteOrientedGraph extends GraphTraverser[BipartiteOrientedGraph]{
+
+object BipartiteOrientedGraph extends GraphTraverser[ BipartiteOrientedGraph ] {
   def graphFromSlices(
-                     size:Int,
-                     n:Int,
-                     f:(Int,Int)=>Boolean
-                     ):BipartiteOrientedGraph =
-    BipartiteOrientedGraph(BipartiteGraphAdjacencyMatrix.fromSlices(size,n,f))
+                       size: Int,
+                       n: Int,
+                       f: (Int, Int) => Boolean
+                     ): BipartiteOrientedGraph =
+    BipartiteOrientedGraph(BipartiteGraphAdjacencyMatrix.fromSlices(size, n, f))
 }

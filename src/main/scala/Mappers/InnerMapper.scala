@@ -1,4 +1,0 @@
-package Mappers
-
-object InnerMapper {
-}

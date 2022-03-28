@@ -7,4 +7,4 @@ import java.util.UUID
  * В отлчии от AbilityEntity может содержать логику и дополнительную логику
  * Слой для осуществелния логики
  * */
-case class Ability(id: UUID, name: String)
+case class Ability(id: UUID, name: String) extends IKSA

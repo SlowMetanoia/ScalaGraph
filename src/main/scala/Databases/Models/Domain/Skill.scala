@@ -7,4 +7,4 @@ import java.util.UUID
  * В отлчии от SkillEntity может содержать логику и дополнительную логику
  * Слой для осуществелния логики
  * */
-case class Skill(id: UUID, name: String)
+case class Skill(id: UUID, name: String) extends IKSA

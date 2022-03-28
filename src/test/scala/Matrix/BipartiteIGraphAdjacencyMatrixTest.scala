@@ -1,6 +1,6 @@
 package Matrix
 
-import Graphs.Matrix.{ BipartiteGraphAdjacencyMatrix, RectangleMatrix }
+import Graphs.Structures.Matrix.{ BipartiteGraphAdjacencyMatrix, RectangleMatrix }
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
 

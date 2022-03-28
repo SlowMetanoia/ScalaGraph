@@ -1,6 +1,6 @@
 package Output
 
-import Graphs.Matrix.RectangleMatrix
+import Graphs.Structures.Matrix.RectangleMatrix
 import Printers.matrixConsolePrinter
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should

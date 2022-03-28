@@ -1,4 +1,4 @@
-import Graphs.Matrix.RectangleMatrix
+import Graphs.Structures.Matrix.RectangleMatrix
 
 package object Printers {
   object matrixConsolePrinter{
