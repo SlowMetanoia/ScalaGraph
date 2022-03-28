@@ -1,9 +1,9 @@
 package Graphs.Algorithms
 
-import Graphs.Traits.Graph
+import Graphs.IGraph
 
 object Colorization {
-  def ChromaticNumber[T](graph:Graph[T]):Int = ???
+  def ChromaticNumber[T](graph:IGraph[T]):Int = ???
 
   /**
    * Является ли граф двудольным
@@ -12,16 +12,16 @@ object Colorization {
    * @tparam T Тип графа
    * @return true, если граф двудольный и связный
    */
-  final def isBipartite[T](graph: Graph[T])(implicit handler: GraphTraverser[T]):Boolean =
-    graph.isConnected &&
-      handler.partTraverse(graph,handler.bfs)
+  final def isBipartite[T](graph: IGraph[T])( implicit handler: GraphTraverser[T]):Boolean =
+    //graph.isConnected &&
+      handler.partTraverse(graph,handler.BFS)
     .forall{ _.combinations(2)
         .forall{ pair=>
           !graph.hasEdge(pair.head,pair.last)
         }
   }
 
-  final def toBipartiteGraphParts[T](graph: Graph[T])(implicit handler: GraphTraverser[T]):Iterable[LazyList[Int]] = {
+  final def toBipartiteGraphParts[T](graph: IGraph[T])( implicit handler: GraphTraverser[T]):Iterable[LazyList[Int]] = {
     if (!isBipartite(graph))
       throw new ClassCastException("unable to cast graph into bipartite")
     else
@@ -31,5 +31,5 @@ object Colorization {
       } yield v.flatten
   }
 
-  def PreciseColorize[T](graph: Graph[T]):Seq[Seq[Int]] = ???
+  def PreciseColorize[T](graph: IGraph[T]):Seq[Seq[Int]] = ???
 }

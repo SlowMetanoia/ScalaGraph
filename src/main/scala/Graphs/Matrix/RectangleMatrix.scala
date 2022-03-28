@@ -1,6 +1,5 @@
 package Graphs.Matrix
 
-import Graphs.Traits.Matrix
 import Printers.Printable
 
 /**

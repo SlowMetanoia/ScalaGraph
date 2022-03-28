@@ -1,26 +1,13 @@
 package Graphs.Implementations
 
 import Graphs.Algorithms.GraphTraverser
+import Graphs.{ IGraph, IWeightedIGraph }
 import Graphs.Matrix.RectangleMatrix
-import Graphs.Traits.{Graph, WeightedGraph}
 
 import scala.Array.ofDim
 
-case class OrientedWeightGraph(weightMatrix:RectangleMatrix[Int]) extends Graph[Int] with WeightedGraph{
-  /**
-   * @param i номер вершины
-   * @return соседей i-той вершины
-   */
-  override def getNeighbours(i: Int): Seq[Int] = weightMatrix(i).filterNot(_ == 0)
-
-  /**
-   * Степень вершины
-   *
-   * @param i номер вершины
-   * @return количество рёбер инцидентных вершине (начинающихся либо заканчивающихся в вершине)
-   */
-  override def degrees(i: Int): Int = getNeighbours(i).length
-
+case class OrientedWeightGraph( weightMatrix:RectangleMatrix[Int]) extends IGraph[Int] with IWeightedIGraph{
+  
   /**
    * @param source   номер 1-ой вершины
    * @param receiver номер 2-ой вершины
@@ -33,18 +20,14 @@ case class OrientedWeightGraph(weightMatrix:RectangleMatrix[Int]) extends Graph[
    *
    * @return последовательность всех рёбер графа
    */
-override def edges: Seq[(Int, Int)] = for {
-  i <- 0 to adjacencyMatrix.size._1
-  j <- 0 to adjacencyMatrix.size._2
-  if adjacencyMatrix(i, j)
-} yield (i, j)
+
 
   /**
    * Матрица инцидентности графа
    *
    * @return Матрица, где по индексам (i,j) лежит true, если i-тому ребру инцидентна j-ая вершина
    */
-  override def incidenceMatrix: RectangleMatrix[Boolean] = RectangleMatrix(
+  def incidenceMatrix: RectangleMatrix[Boolean] = RectangleMatrix(
     edges.map{edge=>
     for(i<-weightMatrix.indices._1)
       yield edge._1==i
@@ -55,13 +38,8 @@ override def edges: Seq[(Int, Int)] = for {
    *
    * @return Матрица, где по индексам (i,j) лежит true, если существует ребро из i в j
    */
-  override def adjacencyMatrix: RectangleMatrix[Boolean] =
-    RectangleMatrix(
-      weightMatrix.matrix.map(i =>
-        i.map(j =>
-          j != 0
-      ))
-    )
+  override val adjacencyMatrix = (i:Int,j:Int)=>
+      weightMatrix(i,j) > 0
 
 
   override def isAvailable(source: Int, receiver: Int): Boolean = ???
@@ -92,7 +70,7 @@ override def edges: Seq[(Int, Int)] = for {
    * @return true, если граф связен(сильно связен), иначе false
    */
   @deprecated("НЕ СИЛЬНО, А ПРОСТО СВЯЗЕН!")
-  override def isConnected: Boolean = {
+  def isConnected: Boolean = {
     val avlm = availabilityMatrix
     for{i<-weightMatrix.indices._1
         j<-weightMatrix.indices._2
@@ -105,7 +83,7 @@ override def edges: Seq[(Int, Int)] = for {
    *
    * @return последовательность связных частей графа
    */
-  override def connectedParts: Seq[Seq[Int]] = ???
+  def connectedParts: Seq[Seq[Int]] = ???
 
   /**
    * Путь минимальной длинны
@@ -114,7 +92,7 @@ override def edges: Seq[(Int, Int)] = for {
    * @param receiver вершина-приёмник
    * @return Путь минимальной длинны из источника в приёмник, если такой путь существует.
    */
-  override def minimumLengthPath(source: Int, receiver: Int): Option[Seq[Int]] = ???
+  def minimumLengthPath(source: Int, receiver: Int): Option[Seq[Int]] = ???
 
   /**
    * Подграф.
@@ -122,16 +100,8 @@ override def edges: Seq[(Int, Int)] = for {
    * @param nodes набор вершин для генерации подграфа
    * @return Подграф из выбранных вершин и всех рёбер между ними.
    */
-  override def subgraph(nodes: Seq[Int]): Graph[Int] = ???
-
-  /**
-   * Граф с новыми рёбрами
-   *
-   * @param f Правило построения ребра
-   * @return Граф с рёбрами, соответствующими правилу построения
-   */
-  override def newEdgesGraph(f: Int => Int => Boolean): Graph[Int] = ???
-
+  override def subgraph(nodes: Seq[Int]): IGraph[Int] = ???
+  
   /**
    * Вес ребра
    *
@@ -157,6 +127,10 @@ override def edges: Seq[(Int, Int)] = for {
    * @return Минимальный по весу путь между двумя вершинами, если такой путь возможен. Иначе - неопределенно.
    */
   override def minimumWeightPath(source: Int, receiver: Int): Option[Seq[Int]] = ???
+  
+  override def indices: (Seq[ Int ], Seq[ Int ]) = weightMatrix.indices
+  
+  override def size: (Int, Int) = weightMatrix.size
 }
 
 object OrientedWeightGraph extends GraphTraverser[Int]

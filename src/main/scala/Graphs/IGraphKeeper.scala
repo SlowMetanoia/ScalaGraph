@@ -1,0 +1,5 @@
+package Graphs
+
+trait IGraphKeeper {
+
+}
