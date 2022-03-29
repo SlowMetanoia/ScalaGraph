@@ -1,6 +1,6 @@
-package Databases.Dao.Implementations
+package Databases.Dao
 
-import Databases.Dao.Traits.KnowledgeDao
+import Databases.Configurations.{ASC, Id}
 import Databases.Models.Dao.KnowledgeEntity
 import scalikejdbc.interpolation.SQLSyntax
 import scalikejdbc.{NamedDB, scalikejdbcSQLInterpolationImplicitDef}
@@ -15,7 +15,7 @@ import java.util.UUID
  * @see KnowledgeDao
  * @see KnowledgeEntity
  * */
-case class KnowledgeDaoImpl(dbName: String) extends KnowledgeDao {
+case class KnowledgeDao(dbName: String) extends IKnowledgeDao {
 
   /**
    * Выполнение SQL запроса на получение всех записей из таблицы Knowledge
@@ -28,13 +28,13 @@ case class KnowledgeDaoImpl(dbName: String) extends KnowledgeDao {
    */
   override def findAll(limit: Int = 100,
                        offset: Int = 0,
-                       orderBy: String = "id",
-                       sort: String = "ASC"): Seq[KnowledgeEntity] = {
+                       orderBy: SQLSyntax = Id.value,
+                       sort: SQLSyntax = ASC.value): Seq[KnowledgeEntity] = {
 
     NamedDB(s"$dbName") readOnly { implicit session =>
       sql"""
         SELECT * FROM knowledge
-        ORDER BY ${SQLSyntax.createUnsafely(orderBy)} ${SQLSyntax.createUnsafely(sort)}
+        ORDER BY $orderBy $sort
         LIMIT $limit
         OFFSET $offset
       """.map(knowledge => KnowledgeEntity(

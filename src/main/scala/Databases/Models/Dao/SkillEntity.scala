@@ -4,7 +4,8 @@ import java.util.UUID
 
 /**
  * Класс сущностей Skill соответсвующий таблице SKILL в БД
- * Может содержать только поля
  * Слой для работы с БД
+ *
+ * @see IEntity
  * */
-case class SkillEntity(id: UUID, name: String)
+case class SkillEntity(id: UUID, name: String) extends IEntity

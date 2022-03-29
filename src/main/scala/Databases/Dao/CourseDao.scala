@@ -1,6 +1,6 @@
-package Databases.Dao.Implementations
+package Databases.Dao
 
-import Databases.Dao.Traits.CourseDao
+import Databases.Configurations.{ASC, Id}
 import Databases.Models.Dao.{AbilityEntity, CourseEntity, KnowledgeEntity, SkillEntity}
 import scalikejdbc.interpolation.SQLSyntax
 import scalikejdbc.{NamedDB, scalikejdbcSQLInterpolationImplicitDef}
@@ -18,12 +18,12 @@ import java.util.UUID
  * @see CourseDao
  * @see CourseEntity
  * */
-case class CourseDaoImpl(dbName: String) extends CourseDao {
+case class CourseDao(dbName: String) extends ICourseDao {
 
   /**
    * Класс "заглушка" для промежуточного хранения id и имени курса
    */
-  import CourseDaoImpl.CoursePlug
+  import CourseDao.CoursePlug
 
   /**
    * Выполнение SQL запроса на получение всех записей из таблицы Course
@@ -36,14 +36,14 @@ case class CourseDaoImpl(dbName: String) extends CourseDao {
    */
   override def findAll(limit: Int = 100,
                        offset: Int = 0,
-                       orderBy: String = "id",
-                       sort: String = "ASC"): Seq[CourseEntity] = {
+                       orderBy: SQLSyntax = Id.value,
+                       sort: SQLSyntax = ASC.value): Seq[CourseEntity] = {
     //Из таблицы Course получаем id и имя
     val coursePlugs: Seq[CoursePlug] = {
       NamedDB(s"$dbName") readOnly { implicit session =>
         sql"""
           SELECT * FROM course
-          ORDER BY ${SQLSyntax.createUnsafely(orderBy)} ${SQLSyntax.createUnsafely(sort)}
+          ORDER BY $orderBy $sort
           LIMIT $limit
           OFFSET $offset
         """.map(course => CoursePlug(
@@ -479,6 +479,6 @@ case class CourseDaoImpl(dbName: String) extends CourseDao {
 }
 
 
-object CourseDaoImpl {
+object CourseDao {
   private case class CoursePlug(id: UUID, name: String)
 }

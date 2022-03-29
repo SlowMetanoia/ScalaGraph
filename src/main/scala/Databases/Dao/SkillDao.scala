@@ -1,7 +1,8 @@
-package Databases.Dao.Implementations
+package Databases.Dao
 
-import Databases.Dao.Traits.SkillDao
+import Databases.Configurations.{ASC, Id}
 import Databases.Models.Dao.SkillEntity
+import scalikejdbc.interpolation.SQLSyntax
 import scalikejdbc.{NamedDB, SQLSyntax, scalikejdbcSQLInterpolationImplicitDef}
 
 import java.util.UUID
@@ -14,7 +15,7 @@ import java.util.UUID
  * @see SkillDao
  * @see SkillEntity
  * */
-case class SkillDaoImpl(dbName: String) extends SkillDao {
+case class SkillDao(dbName: String) extends ISkillDao {
 
   /**
    * Выполнение SQL запроса на получение всех записей из таблицы Skill
@@ -27,13 +28,13 @@ case class SkillDaoImpl(dbName: String) extends SkillDao {
    */
   override def findAll(limit: Int = 100,
                        offset: Int = 0,
-                       orderBy: String = "id",
-                       sort: String = "ASC"): Seq[SkillEntity] = {
+                       orderBy: SQLSyntax = Id.value,
+                       sort: SQLSyntax = ASC.value): Seq[SkillEntity] = {
 
     NamedDB(s"$dbName") readOnly { implicit session =>
       sql"""
         SELECT * FROM SKILL
-        ORDER BY ${SQLSyntax.createUnsafely(orderBy)} ${SQLSyntax.createUnsafely(sort)}
+        ORDER BY $orderBy $sort
         LIMIT $limit
         OFFSET $offset
       """.map(skill => SkillEntity(

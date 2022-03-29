@@ -3,8 +3,9 @@ package Databases.Models.Domain
 import java.util.UUID
 
 /**
- * Класс только
- * В отлчии от толькоEntity может содержать логику и дополнительную логику
- * Слой для осуществелния логики
+ * Класс Knowledge
+ * В отлчии от KnowledgeEntity может содержать логику
+ *
+ * @see IKSA
  * */
-case class Knowledge(id: UUID, name: String)
+case class Knowledge(id: UUID, name: String) extends IKSA

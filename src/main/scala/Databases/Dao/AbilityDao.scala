@@ -1,7 +1,6 @@
-package Databases.Dao.Implementations
+package Databases.Dao
 
-import Databases.Configurations.Id
-import Databases.Dao.Traits.AbilityDao
+import Databases.Configurations.{ASC, Id}
 import Databases.Models.Dao.AbilityEntity
 import scalikejdbc.interpolation.SQLSyntax
 import scalikejdbc.{NamedDB, scalikejdbcSQLInterpolationImplicitDef}
@@ -17,7 +16,7 @@ import scala.language.implicitConversions
  * @see AbilityDao
  * @see AbilityEntity
  * */
-case class AbilityDaoImpl(dbName: String) extends AbilityDao {
+case class AbilityDao(dbName: String) extends IAbilityDao {
   /**
    * Выполнение SQL запроса на получение всех записей из таблицы Ability
    *
@@ -29,12 +28,12 @@ case class AbilityDaoImpl(dbName: String) extends AbilityDao {
    */
   override def findAll(limit: Int = 100,
                        offset: Int = 0,
-                       orderBy: String = "id",
-                       sort: String = "ASC"): Seq[AbilityEntity] = {
+                       orderBy: SQLSyntax = Id.value,
+                       sort: SQLSyntax = ASC.value): Seq[AbilityEntity] = {
     NamedDB(s"$dbName") readOnly { implicit session =>
       sql"""
         SELECT * FROM ability
-        ORDER BY ${Id} ${SQLSyntax.createUnsafely(sort)}
+        ORDER BY $orderBy $sort
         LIMIT $limit
         OFFSET $offset
       """.map(ability => AbilityEntity(

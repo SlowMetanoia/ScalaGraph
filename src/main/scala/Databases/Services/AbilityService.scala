@@ -1,33 +1,37 @@
-package Databases.Services.Implementations
+package Databases.Services
 
-import Databases.Dao.Implementations.AbilityDaoImpl
-import Databases.Dao.Traits.AbilityDao
-import Databases.Mappers.Implementations.AbilityMapperImpl
-import Databases.Mappers.Traits.AbilityMapper
+import Databases.Configurations.{ASC, Id}
+import Databases.Dao.{AbilityDao, IAbilityDao}
+import Databases.Mappers.{AbilityMapper, IAbilityMapper}
 import Databases.Models.Domain.Ability
-import Databases.Services.Traits.AbilityService
+import scalikejdbc.interpolation.SQLSyntax
 
 import java.util.UUID
 
-case class AbilityServiceImpl(dbname: String) extends AbilityService {
-  private val abilityMapper: AbilityMapper = AbilityMapperImpl()
-  private val abilityDao: AbilityDao = AbilityDaoImpl(dbname)
+/**
+ * Сервис для работы с Ability Entity
+ *
+ * @param dbname имя БД с которой будет просиходит работа
+ */
+case class AbilityService(dbname: String) extends IAbilityService {
+  private val abilityMapper: IAbilityMapper = AbilityMapper()
+  private val abilityDao: IAbilityDao = AbilityDao(dbname)
 
   /**
    * Получение всех Ability
    *
-   * @param limit кол-во записей которые необходимо получить
-   * @param offset отсутуп от начала полученных записей
+   * @param limit   кол-во записей которые необходимо получить
+   * @param offset  отсутуп от начала полученных записей
    * @param orderBy поле по которому необходимо отсортировать записи
-   * @param sort порядок сортировки
+   * @param sort    порядок сортировки
    * @return последовательность всех Ability
    */
   override def findAll(limit: Int = 100,
                        offset: Int = 0,
-                       orderBy: String = "id",
-                       sort: String = "ASC"): Seq[Ability] =
+                       orderBy: SQLSyntax = Id.value,
+                       sort: SQLSyntax = ASC.value): Seq[Ability] =
     abilityDao.findAll(limit, offset, orderBy, sort)
-      .map(ability => abilityMapper.abilityEntity2Ability(ability))
+      .map(ability => abilityMapper.entity2Model(ability))
 
   /**
    * Получение Ability по id
@@ -36,14 +40,15 @@ case class AbilityServiceImpl(dbname: String) extends AbilityService {
    * @return Optional с Ability если такая есть в БД, иначе Option.empty
    */
   override def findById(id: UUID): Option[Ability] =
-      abilityDao.findById(id).map(abilityMapper.abilityEntity2Ability)
+    abilityDao.findById(id).map(abilityMapper.entity2Model)
+
   /**
    * Вставка новой Ability
    *
    * @param ability entity которую необходимо вставить
    */
   override def insert(ability: Ability): Unit =
-    abilityDao.insert(abilityMapper.ability2AbilityEntity(ability))
+    abilityDao.insert(abilityMapper.model2Entity(ability))
 
   /**
    * Удаление Ability по id
@@ -59,5 +64,5 @@ case class AbilityServiceImpl(dbname: String) extends AbilityService {
    * @param ability которое будет обновлено
    */
   override def update(ability: Ability): Unit =
-    abilityDao.update(abilityMapper.ability2AbilityEntity(ability))
+    abilityDao.update(abilityMapper.model2Entity(ability))
 }

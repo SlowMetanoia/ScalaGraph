@@ -1,15 +1,14 @@
 package Databases.Configurations
 
-import Databases.Dao.Implementations.{AbilityDaoImpl, CourseDaoImpl, KnowledgeDaoImpl, SkillDaoImpl}
-import Databases.Dao.Traits.{AbilityDao, CourseDao, KnowledgeDao, SkillDao}
+import Databases.Dao.{AbilityDao, CourseDao, IAbilityDao, ICourseDao, IKnowledgeDao, ISkillDao, KnowledgeDao, SkillDao}
 import Databases.Models.Dao.{AbilityEntity, CourseEntity, KnowledgeEntity, SkillEntity}
 import scalikejdbc.{NamedDB, SQLSyntax, scalikejdbcSQLInterpolationImplicitDef}
 
 class DatabaseManager(val dbname: String) {
-  private lazy val skillDao: SkillDao = SkillDaoImpl(dbname)
-  private lazy val abilityDao: AbilityDao = AbilityDaoImpl(dbname)
-  private lazy val knowledgeDao: KnowledgeDao = KnowledgeDaoImpl(dbname)
-  private lazy val courseDao: CourseDao = CourseDaoImpl(dbname)
+  private lazy val skillDao: ISkillDao = SkillDao(dbname)
+  private lazy val abilityDao: IAbilityDao = AbilityDao(dbname)
+  private lazy val knowledgeDao: IKnowledgeDao = KnowledgeDao(dbname)
+  private lazy val courseDao: ICourseDao = CourseDao(dbname)
 
   def dropAllTables(): Unit =
     NamedDB(s"$dbname") localTx { implicit session =>
