@@ -1,13 +1,12 @@
 package Graphs.Structures.Matrix
 
 import Graphs.Algorithms.SeqCartesianProduct
+import Graphs.Structures.{ Limit, Limits }
 
 
 case
 class BipartiteGraphAdjacencyMatrix( private val left: RectangleMatrix[ Boolean ], private val
 right: RectangleMatrix[ Boolean ] ) extends Matrix[ Boolean ] {
-  
-  import Graphs.Structures.Matrix.BipartiteGraphAdjacencyMatrix._
   
   override
   def apply( i: Int ): Seq[ Boolean ] = i match {
@@ -115,16 +114,6 @@ right: RectangleMatrix[ Boolean ] ) extends Matrix[ Boolean ] {
 }
 
 object BipartiteGraphAdjacencyMatrix {
-  case
-  class Limit( l: Int, r: Int ) {
-    def apply( value: Int ): Boolean = value >= l && value < r
-  }
-  
-  case
-  class Limits( rowLim: Limit, colLim: Limit ) {
-    def apply( i: Int, j: Int ): Boolean = rowLim(i) && colLim(j)
-  }
-  
   def fromSlices(
                   size: Int,
                   delimiter: Int,

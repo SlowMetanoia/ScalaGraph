@@ -7,7 +7,7 @@ package Graphs.Structures.Storeges
  */
 trait ILinkKeeper[L,R] {
   def left2Right(l:L):R
-  def Right2Left(r:R):L
+  def right2Left(r:R):L
   def add( p1:L, p2:R): this.type
   def addAll(cc:Iterable[(L,R)]): this.type
 }
