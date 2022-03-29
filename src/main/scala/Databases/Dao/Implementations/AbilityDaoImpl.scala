@@ -1,11 +1,13 @@
 package Databases.Dao.Implementations
 
+import Databases.Configurations.Id
 import Databases.Dao.Traits.AbilityDao
 import Databases.Models.Dao.AbilityEntity
 import scalikejdbc.interpolation.SQLSyntax
 import scalikejdbc.{NamedDB, scalikejdbcSQLInterpolationImplicitDef}
 
 import java.util.UUID
+import scala.language.implicitConversions
 
 /**
  * Реализация AbilityDao
@@ -16,7 +18,6 @@ import java.util.UUID
  * @see AbilityEntity
  * */
 case class AbilityDaoImpl(dbName: String) extends AbilityDao {
-
   /**
    * Выполнение SQL запроса на получение всех записей из таблицы Ability
    *
@@ -33,7 +34,7 @@ case class AbilityDaoImpl(dbName: String) extends AbilityDao {
     NamedDB(s"$dbName") readOnly { implicit session =>
       sql"""
         SELECT * FROM ability
-        ORDER BY ${SQLSyntax.createUnsafely(orderBy)} ${SQLSyntax.createUnsafely(sort)}
+        ORDER BY ${Id} ${SQLSyntax.createUnsafely(sort)}
         LIMIT $limit
         OFFSET $offset
       """.map(ability => AbilityEntity(

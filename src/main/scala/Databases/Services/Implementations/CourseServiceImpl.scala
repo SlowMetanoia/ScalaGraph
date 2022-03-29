@@ -1,11 +1,11 @@
-package Databases.Services.Traits
+package Databases.Services.Implementations
 
 import Databases.Dao.Implementations.CourseDaoImpl
 import Databases.Dao.Traits.CourseDao
 import Databases.Mappers.Implementations.{AbilityMapperImpl, CourseMapperImpl, KnowledgeMapperImpl, SkillMapperImpl}
 import Databases.Mappers.Traits.CourseMapper
 import Databases.Models.Domain.Course
-import Databases.Services.Implementations.CourseService
+import Databases.Services.Traits.CourseService
 
 import java.util.UUID
 

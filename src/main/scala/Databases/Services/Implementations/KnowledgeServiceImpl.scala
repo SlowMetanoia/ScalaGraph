@@ -1,11 +1,11 @@
-package Databases.Services.Traits
+package Databases.Services.Implementations
 
 import Databases.Dao.Implementations.KnowledgeDaoImpl
 import Databases.Dao.Traits.KnowledgeDao
 import Databases.Mappers.Implementations.KnowledgeMapperImpl
 import Databases.Mappers.Traits.KnowledgeMapper
 import Databases.Models.Domain.Knowledge
-import Databases.Services.Implementations.KnowledgeService
+import Databases.Services.Traits.KnowledgeService
 
 import java.util.UUID
 

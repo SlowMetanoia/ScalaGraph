@@ -1,11 +1,11 @@
-package Databases.Services.Traits
+package Databases.Services.Implementations
 
 import Databases.Dao.Implementations.AbilityDaoImpl
 import Databases.Dao.Traits.AbilityDao
 import Databases.Mappers.Implementations.AbilityMapperImpl
 import Databases.Mappers.Traits.AbilityMapper
 import Databases.Models.Domain.Ability
-import Databases.Services.Implementations.AbilityService
+import Databases.Services.Traits.AbilityService
 
 import java.util.UUID
 

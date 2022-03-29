@@ -1,17 +1,18 @@
 package Databases.Services.Implementations
 
+import Databases.Dao.Implementations.SkillDaoImpl
+import Databases.Dao.Traits.SkillDao
+import Databases.Mappers.Implementations.SkillMapperImpl
+import Databases.Mappers.Traits.SkillMapper
 import Databases.Models.Domain.Skill
+import Databases.Services.Traits.SkillService
 
 import java.util.UUID
 
-/**
- * Трейт сервиса для Skill
- * В методах класса сервиса можно добавить логику/валидацию
- * перед работай с entity и БД
- *
- * @see Skill
- * */
-trait SkillService {
+case class SkillServiceImpl(dbname: String) extends SkillService {
+  private val skillMapper: SkillMapper = SkillMapperImpl()
+  private val skillDao: SkillDao = SkillDaoImpl(dbname)
+
   /**
    * Получение всех Skill
    *
@@ -21,10 +22,12 @@ trait SkillService {
    * @param sort порядок сортировки
    * @return последовательность всех Skill
    */
-  def findAll(limit: Int = 100,
-              offset: Int = 0,
-              orderBy: String = "id",
-              sort: String = "ASC"): Seq[Skill]
+  override def findAll(limit: Int = 100,
+                       offset: Int = 0,
+                       orderBy: String = "id",
+                       sort: String = "ASC"): Seq[Skill] =
+    skillDao.findAll(limit, offset, orderBy, sort)
+      .map(skill => skillMapper.skillEntity2Skill(skill))
 
   /**
    * Получение Skill по id
@@ -32,26 +35,30 @@ trait SkillService {
    * @param id Skill которую необходимо получить
    * @return Optional с Skill если такая есть в БД, иначе Option.empty
    */
-  def findById(id: UUID): Option[Skill]
+  override def findById(id: UUID): Option[Skill] =
+    skillDao.findById(id).map(skillMapper.skillEntity2Skill)
 
   /**
    * Вставка новой Skill
    *
    * @param skill entity которуб необходимо вставить в таблицу
    */
-  def insert(skill: Skill): Unit
+  override def insert(skill: Skill): Unit =
+    skillDao.insert(skillMapper.skill2SkillEntity(skill))
 
   /**
    * Удаление Skill по id
    *
    * @param id Skill которую необходимо удалить
    */
-  def deleteById(id: UUID): Unit
+  override def deleteById(id: UUID): Unit =
+    skillDao.deleteById(id)
 
   /**
    * Обновление Skill
    *
    * @param skill которое будет обновлено
    */
-  def update(skill: Skill): Unit
+  override def update(skill: Skill): Unit =
+    skillDao.insert(skillMapper.skill2SkillEntity(skill))
 }

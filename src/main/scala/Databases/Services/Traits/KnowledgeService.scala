@@ -1,4 +1,4 @@
-package Databases.Services.Implementations
+package Databases.Services.Traits
 
 import Databases.Models.Domain.Knowledge
 
