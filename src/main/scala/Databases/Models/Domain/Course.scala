@@ -12,14 +12,16 @@ case class Course(
   inputKnowledge: Seq[Knowledge],
   outputKnowledge: Seq[Knowledge]
 ){
-  def isInput(ksa:IKSA): Boolean = {
+  def isInput(ksa:IKSA): Boolean = ksa match {
     case k:Knowledge => inputKnowledge.contains(k)
     case s:Skill => inputSkills.contains(s)
     case a:Ability => inputAbility.contains(a)
+    case _ => throw new IllegalArgumentException
   }
-  def isOutput(ksa:IKSA): Boolean = {
+  def isOutput(ksa:IKSA): Boolean = ksa match {
     case k:Knowledge => outputKnowledge.contains(k)
     case s:Skill => outputSkills.contains(s)
     case a:Ability => outputAbility.contains(a)
+    case _ => throw new IllegalArgumentException
   }
 }

@@ -5,9 +5,9 @@ class MapLinkKeeper[ L, R ]( lMap: Map[ L, R ], rMap: Map[ R, L ] ) extends ILin
   
   override def right2Left( r: R ): L = rMap(r)
   
-  override def add( p1: L, p2: R ): MapLinkKeeper.this.type = MapLinkKeeper(lMap + ( p1 -> p2 ))
+  override def add( p1: L, p2: R ): MapLinkKeeper[L,R] = MapLinkKeeper(lMap + ( p1 -> p2 ))
   
-  override def addAll( cc: Iterable[ (L, R) ] ): MapLinkKeeper.this.type = MapLinkKeeper(lMap ++ cc)
+  override def addAll( cc: Iterable[ (L, R) ] ): MapLinkKeeper[L,R] = MapLinkKeeper(lMap ++ cc)
   
   val size: Int = lMap.size
 }

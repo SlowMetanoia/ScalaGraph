@@ -9,6 +9,10 @@ class CourseLinkKeeper(
                         toCourseMap: Map[ Int, Course ]
                       )
   extends MapLinkKeeper(fromCourseMap, toCourseMap) {
+  
+  
+  override def add( p1: Course, p2: Int ): CourseLinkKeeper = CourseLinkKeeper(fromCourseMap + (p1->p2))
+  
   def apply( course: Course ): Int = fromCourseMap(course)
   
   def apply( n: Int ): Course = toCourseMap(n)
