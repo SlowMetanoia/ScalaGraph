@@ -1,6 +1,16 @@
 package Databases.Models.Dao
 
+import java.util.UUID
+
 /**
- * Маркерный трейт для Entity классов
+ * Трейт для Entity классов
  * */
-trait IEntity
+trait IEntity {
+  val id: UUID
+  val name: String
+}
+
+/**
+ * Маркерный трейт для ЗУН'ов
+ */
+trait IKSAEntity extends IEntity

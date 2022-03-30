@@ -1,6 +1,6 @@
 package Databases.Mappers
 
-import Databases.Models.Dao.SkillEntity
+import Databases.Models.Dao.{IKSAEntity, SkillEntity}
 import Databases.Models.Domain.Skill
 
 /**
@@ -26,4 +26,12 @@ case class SkillMapper() extends ISkillMapper {
    */
   override def model2Entity(skill: Skill): SkillEntity =
     SkillEntity(skill.id, skill.name)
+
+  /**
+   * Перевод из общего вида ЗУН'ов - IKSAEntity в SkillEntity
+   * @param entity ЗУН общего вида для перевода
+   * @return ЗУН вида SkillEntity
+   */
+  override def iKSAEntity2Entity(entity: IKSAEntity): SkillEntity =
+    SkillEntity(entity.id, entity.name)
 }

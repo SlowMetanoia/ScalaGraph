@@ -1,95 +1,89 @@
 package Databases.Configurations
 
-import Databases.Models.Dao.{AbilityEntity, CourseEntity, KnowledgeEntity, SkillEntity}
+import Databases.Mappers._
+import Databases.Models.Dao._
+import scalikejdbc.interpolation.SQLSyntax
 
 import java.util.UUID
 import scala.annotation.tailrec
 import scala.util.Random
 
+/**
+ * Генератор данных
+ * Может и не совсем красивый, но его как бы вообще быть не должно
+ *
+ * """Оставь надежды всяк сюда входящий"""
+ */
 object DataGenerator {
-  private def uniqueSkills(skills: Seq[SkillEntity], quantity: Int): Seq[SkillEntity] = {
-    val res = Seq.empty[SkillEntity]
+  /**
+   * Без них никуда
+   */
+  private lazy val skillMapper: ISkillMapper = SkillMapper()
+  private lazy val abilityMapper: IAbilityMapper = AbilityMapper()
+  private lazy val knowledgeMapper: IKnowledgeMapper = KnowledgeMapper()
+
+  /***
+   * Функция получения случайных уникальных по
+   * @param entities последовательность из которой бу
+   * @param quantity кол-во элементов в уникальной последователбности
+   * @return кортеж из двух последовательностей.
+   *         1 - уникальная последоваталеьность заднного размера.
+   *         2 - последовательность без ЗУН'ов выделенных в первую последовательность
+   */
+  def uniqueKSA(entities: Seq[IKSAEntity], quantity: Int): (Seq[IKSAEntity], Seq[IKSAEntity]) = {
+    val res = Seq.empty[IKSAEntity]
 
     @tailrec
-    def step(skills: Seq[SkillEntity], res: Seq[SkillEntity], quantity: Int): Seq[SkillEntity] = {
-      if (quantity == 0) return res
-      val skill = skills(Random.between(0, skills.length))
-      step(skills.filter(x => x != skill), res :+ skill, quantity - 1)
+    def step(entities: Seq[IKSAEntity], res: Seq[IKSAEntity], quantity: Int): (Seq[IKSAEntity], Seq[IKSAEntity]) = {
+      if (quantity == 0) return (res, entities)
+      val entity = entities(Random.between(0, entities.length))
+      step(entities.filter(x => x != entity), res :+ entity, quantity -1)
     }
 
-    step(skills, res, quantity)
+    step(entities, res, quantity)
   }
 
-  private def uniqueAbilities(abilities: Seq[AbilityEntity], quantity: Int): Seq[AbilityEntity] = {
-    val res = Seq.empty[AbilityEntity]
-
-    @tailrec
-    def step(abilities: Seq[AbilityEntity], res: Seq[AbilityEntity], quantity: Int): Seq[AbilityEntity] = {
-      if (quantity == 0) return res
-      val ability = abilities(Random.between(0, abilities.length))
-      step(abilities.filter(x => x != ability), res :+ ability, quantity - 1)
-    }
-
-    step(abilities, res, quantity)
-  }
-
-  private def uniqueKnowledge(knowledge: Seq[KnowledgeEntity], quantity: Int): Seq[KnowledgeEntity] = {
-    val res = Seq.empty[KnowledgeEntity]
-
-    @tailrec
-    def step(knowledge: Seq[KnowledgeEntity], res: Seq[KnowledgeEntity], quantity: Int): Seq[KnowledgeEntity] = {
-      if (quantity == 0) return res
-      val know = knowledge(Random.between(0, knowledge.length))
-      step(knowledge.filter(x => x != know), res :+ know, quantity - 1)
-    }
-
-    step(knowledge, res, quantity)
-  }
-
-  def generateSkill(interval: (Int, Int)): Seq[SkillEntity] = {
+  /**
+   * Генератор ЗУН'ов.
+   * В зависимости от преденной таблицы генерируем ЗУн определенного типа
+   * @param tableName имя таблицы ЗУН'ы которой мы хотим генерировать
+   * @param interval промежуток мин и макс кол-во ЗУН'ов, которые мы хотим сгененировать
+   * @return последовательность ЗУН'ов определенного типа
+   */
+  def generateKSA(tableName: SQLSyntax, interval: (Int, Int)): Seq[IKSAEntity] = {
     val count = Random.between(interval._1, interval._2)
-    val res = Seq.empty[SkillEntity]
+    val res = Seq.empty[IKSAEntity]
 
     @tailrec
-    def step(skills: Seq[SkillEntity], count: Int): Seq[SkillEntity] = {
-      if (count == 0) return skills
-      step(skills :+ SkillEntity(UUID.randomUUID(), s"Навык$count"), count - 1)
+    def step(entities: Seq[IKSAEntity], count: Int): Seq[IKSAEntity] = {
+      if (count == 0) return entities
+
+      tableName match {
+        case SKILL.value => step(entities :+ SkillEntity(UUID.randomUUID(), s"Навык$count"), count - 1)
+        case ABILITY.value => step(entities :+ AbilityEntity(UUID.randomUUID(), s"Умение$count"), count - 1)
+        case KNOWLEDGE.value => step(entities :+ KnowledgeEntity(UUID.randomUUID(), s"Знание$count"), count - 1)
+        case _ => throw new IllegalArgumentException
+      }
     }
 
     step(res, count)
   }
 
-  def generateAbility(interval: (Int, Int)): Seq[AbilityEntity] = {
-    val count = Random.between(interval._1, interval._2)
-    val res = Seq.empty[AbilityEntity]
-
-    @tailrec
-    def step(abilities: Seq[AbilityEntity], count: Int): Seq[AbilityEntity] = {
-      if (count == 0) return abilities
-      step(abilities :+ AbilityEntity(UUID.randomUUID(), s"Умение$count"), count - 1)
-    }
-
-    step(res, count)
-  }
-
-  def generateKnowledge(interval: (Int, Int)): Seq[KnowledgeEntity] = {
-    val count = Random.between(interval._1, interval._2)
-    val res = Seq.empty[KnowledgeEntity]
-
-    @tailrec
-    def step(knowledge: Seq[KnowledgeEntity], count: Int): Seq[KnowledgeEntity] = {
-      if (count == 0) return knowledge
-      step(knowledge :+ KnowledgeEntity(UUID.randomUUID(), s"Знание$count"), count - 1)
-    }
-
-    step(res, count)
-  }
-
+  /**
+   * Генератор курсов.
+   * Т.к. курс более сложная сущность, то и логика его генерации сложнее
+   * @param interval промежуток мин и макс кол-во Курсов, которые мы хотим сгененировать
+   * @param ksaInterval промежуток мин и макс кол-во входных/выходных ЗУН'ов в каждой последовательности
+   * @param skills последовательность навыков, используемых при генерации курса
+   * @param abilities последовательность умений, используемых при генерации курса
+   * @param knowledge последовательность знаний, используемых при генерации курса
+   * @return
+   */
   def generateCourse(interval: (Int, Int),
-                     sakInterval: (Int, Int),
-                     skills: Seq[SkillEntity],
-                     abilities: Seq[AbilityEntity],
-                     knowledge: Seq[KnowledgeEntity]): Seq[CourseEntity] = {
+                     ksaInterval: (Int, Int),
+                     skills: Seq[IKSAEntity],
+                     abilities: Seq[IKSAEntity],
+                     knowledge: Seq[IKSAEntity]): Seq[CourseEntity] = {
     val count = Random.between(interval._1, interval._2)
     val res = Seq.empty[CourseEntity]
 
@@ -97,21 +91,24 @@ object DataGenerator {
     def step(courses: Seq[CourseEntity], count: Int): Seq[CourseEntity] = {
       if (count == 0) return courses
 
+      val (inputSkill, skillsWithOutInput) = uniqueKSA(skills, Random.between(ksaInterval._1, ksaInterval._2))
+      val (inputAbilities, abilitiesWithOutInput) = uniqueKSA(abilities, Random.between(ksaInterval._1, ksaInterval._2))
+      val (inputKnowledge, knowledgeWithOutInput) = uniqueKSA(knowledge, Random.between(ksaInterval._1, ksaInterval._2))
+
       step(courses :+ CourseEntity(
         id = UUID.randomUUID(),
         name = s"Курс$count",
 
-        inputSkills = uniqueSkills(skills, Random.between(sakInterval._1, sakInterval._2)),
-        outputSkills = uniqueSkills(skills, Random.between(sakInterval._1, sakInterval._2)),
+        inputSkills = inputSkill.map(skillMapper.iKSAEntity2Entity),
+        outputSkills = uniqueKSA(skillsWithOutInput, Random.between(ksaInterval._1, ksaInterval._2))._1.map(skillMapper.iKSAEntity2Entity),
 
-        inputAbility = uniqueAbilities(abilities, Random.between(sakInterval._1, sakInterval._2)),
-        outputAbility = uniqueAbilities(abilities, Random.between(sakInterval._1, sakInterval._2)),
+        inputAbility = inputAbilities.map(abilityMapper.iKSAEntity2Entity),
+        outputAbility = uniqueKSA(abilitiesWithOutInput, Random.between(ksaInterval._1, ksaInterval._2))._1.map(abilityMapper.iKSAEntity2Entity),
 
-        inputKnowledge = uniqueKnowledge(knowledge, Random.between(sakInterval._1, sakInterval._2)),
-        outputKnowledge = uniqueKnowledge(knowledge, Random.between(sakInterval._1, sakInterval._2))
+        inputKnowledge = inputKnowledge.map(knowledgeMapper.iKSAEntity2Entity),
+        outputKnowledge = uniqueKSA(knowledgeWithOutInput, Random.between(ksaInterval._1, ksaInterval._2))._1.map(knowledgeMapper.iKSAEntity2Entity),
       ), count - 1)
     }
-
     step(res, count)
   }
 }

@@ -30,3 +30,14 @@ object Name extends SQLSyntaxProvider(SQLSyntaxProvider("name"))
 object ASC extends SQLSyntaxProvider(SQLSyntaxProvider("ASC"))
 
 object DESC extends SQLSyntaxProvider(SQLSyntaxProvider("DESC"))
+
+/**
+ * Основные таблицы
+ * */
+object SKILL extends SQLSyntaxProvider(SQLSyntaxProvider("SKILL"))
+
+object ABILITY extends SQLSyntaxProvider(SQLSyntaxProvider("ABILITY"))
+
+object KNOWLEDGE extends SQLSyntaxProvider(SQLSyntaxProvider("KNOWLEDGE"))
+
+object COURSE extends SQLSyntaxProvider(SQLSyntaxProvider("COURSE"))

@@ -1,6 +1,6 @@
 package Databases.Mappers
 
-import Databases.Models.Dao.AbilityEntity
+import Databases.Models.Dao.{AbilityEntity, IKSAEntity}
 import Databases.Models.Domain.Ability
 
 /**
@@ -26,4 +26,12 @@ case class AbilityMapper() extends IAbilityMapper {
    */
   override def model2Entity(ability: Ability): AbilityEntity =
     AbilityEntity(ability.id, ability.name)
+
+  /**
+   * Перевод из общего вида ЗУН'ов - IKSAEntity в AbilityEntity
+   * @param entity ЗУН общего вида для перевода
+   * @return ЗУН вида AbilityEntity
+   */
+  override def iKSAEntity2Entity(entity: IKSAEntity): AbilityEntity =
+    AbilityEntity(entity.id, entity.name)
 }

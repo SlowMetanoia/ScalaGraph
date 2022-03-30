@@ -1,6 +1,6 @@
 package Databases.Mappers
 
-import Databases.Models.Dao.KnowledgeEntity
+import Databases.Models.Dao.{IKSAEntity, KnowledgeEntity}
 import Databases.Models.Domain.Knowledge
 
 /**
@@ -26,4 +26,12 @@ case class KnowledgeMapper() extends IKnowledgeMapper {
    */
   override def model2Entity(knowledge: Knowledge): KnowledgeEntity =
     KnowledgeEntity(knowledge.id, knowledge.name)
+
+  /**
+   * Перевод из общего вида ЗУН'ов - IKSAEntity в KnowledgeEntity
+   * @param entity ЗУН общего вида для перевода
+   * @return ЗУН вида KnowledgeEntity
+   */
+  override def iKSAEntity2Entity(entity: IKSAEntity): KnowledgeEntity =
+    KnowledgeEntity(entity.id, entity.name)
 }

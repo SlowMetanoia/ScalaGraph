@@ -1,11 +1,7 @@
 package Databases.Configurations
 
-import Databases.Services.{AbilityService, CourseService, IAbilityService, ICourseService, IKnowledgeService, ISkillService, KnowledgeService, SkillService}
-
 import scala.language.implicitConversions
-//import Databases.Configurations.SQLUnsafeSugar.sqlUnsafeSugar2SQLSyntax
 import scalikejdbc.config.DBs
-import scalikejdbc.interpolation.SQLSyntax
 
 /**
  * Конфигурация подключений к БД.
@@ -18,16 +14,19 @@ object Configurations extends App {
   DBs.setupAll()
 
   private val horizontal = "horizontal"
-  private val tetrahedral = "tetrahedral"
   private val reticulated = "reticulated"
+  private val tetrahedral = "tetrahedral"
 
-  val skillService: ISkillService = SkillService(reticulated)
-  val abilityService: IAbilityService = AbilityService(reticulated)
-  val knowledgeService: IKnowledgeService = KnowledgeService(reticulated)
-  val courseService: ICourseService = CourseService(reticulated)
+  val skills = DataGenerator.generateKSA(SKILL.value, (20, 30))
+  val abilities = DataGenerator.generateKSA(ABILITY.value,(20, 30))
+  val knowledge = DataGenerator.generateKSA(KNOWLEDGE.value, (20, 30))
+  val course = DataGenerator.generateCourse((300, 400), (1,2), skills, abilities, knowledge)
 
-  println(skillService.findAll(10, 2, Name.value, DESC.value))
-//  println(abilityService.findAll(10))
-//  println(knowledgeService.findAll(10))
-//  println(courseService.findAll(10))
+  val dbManager = new DatabaseManager(tetrahedral)
+  dbManager.dropAllTables()
+  dbManager.createAllTables()
+  dbManager.fillKSATable(SKILL.value, skills)
+  dbManager.fillKSATable(ABILITY.value, abilities)
+  dbManager.fillKSATable(KNOWLEDGE.value, knowledge)
+  dbManager.fillCourseTable(course)
 }

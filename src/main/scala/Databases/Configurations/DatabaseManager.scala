@@ -1,15 +1,71 @@
 package Databases.Configurations
 
-import Databases.Dao.{AbilityDao, CourseDao, IAbilityDao, ICourseDao, IKnowledgeDao, ISkillDao, KnowledgeDao, SkillDao}
-import Databases.Models.Dao.{AbilityEntity, CourseEntity, KnowledgeEntity, SkillEntity}
+import Databases.Dao._
+import Databases.Mappers._
+import Databases.Models.Dao.{CourseEntity, IKSAEntity}
 import scalikejdbc.{NamedDB, SQLSyntax, scalikejdbcSQLInterpolationImplicitDef}
 
+/**
+ * Класс управления базой данных (Создание/Удаление/Заполнение таблиц)
+ * @param dbname имя БД для работы
+ */
 class DatabaseManager(val dbname: String) {
+
+  /**
+   * Будем считать, что генератор работает всегда вне основной логики программы
+   * поэтому мы в праве создать здесь локальные ДАО и Мапперы
+   */
   private lazy val skillDao: ISkillDao = SkillDao(dbname)
   private lazy val abilityDao: IAbilityDao = AbilityDao(dbname)
   private lazy val knowledgeDao: IKnowledgeDao = KnowledgeDao(dbname)
   private lazy val courseDao: ICourseDao = CourseDao(dbname)
 
+  private lazy val skillMapper: ISkillMapper = SkillMapper()
+  private lazy val abilityMapper: IAbilityMapper = AbilityMapper()
+  private lazy val knowledgeMapper: IKnowledgeMapper = KnowledgeMapper()
+
+  /**
+   * Заполнение таблиц ЗУН'ов.
+   * Поскольку таблицы по сути своей одинаковы - объединяем локигу
+   * @param table таблица для заполнения
+   * @param entities последователньость ЗУН'ов, которые мы хотим вставить
+   */
+  def fillKSATable(table: SQLSyntax, entities: Seq[IKSAEntity]): Unit = {
+    table match {
+      case SKILL.value => entities.foreach(entity => skillDao.insert(skillMapper.iKSAEntity2Entity(entity)))
+      case ABILITY.value => entities.foreach(entity => abilityDao.insert(abilityMapper.iKSAEntity2Entity(entity)))
+      case KNOWLEDGE.value => entities.foreach(entity => knowledgeDao.insert(knowledgeMapper.iKSAEntity2Entity(entity)))
+      case _ => throw new IllegalArgumentException
+    }
+  }
+
+  /**
+   * Заполнение таблицы Курсов.
+   * Поскольку курс более сложная сущность, чем ЗУН'ы выделим заполнение курсами БД
+   * в отделный метод
+   * @param courses последовательность курсов, которые мы хотим вставить
+   */
+  def fillCourseTable(courses: Seq[CourseEntity]): Unit =
+    courses.foreach(course => courseDao.insert(course))
+
+  /**
+   * Удаление отдельной таблицы.
+   * Почему бы и нет, пускай будет
+   * @param tableName таблица которую мы хотим удалить
+   */
+  def dropTable(tableName: SQLSyntax): Unit = {
+    NamedDB(s"$dbname") localTx { implicit session =>
+      sql"""
+        DROP TABLE IF EXISTS $tableName;
+      """.execute.apply()
+    }
+  }
+
+  /**
+   * Удаление всех таблиц из БД.
+   * Поскольку при работе с Heroku мы не имеем возможности дропать
+   * БД целиком - дропаем все таблицы
+   */
   def dropAllTables(): Unit =
     NamedDB(s"$dbname") localTx { implicit session =>
       sql"""
@@ -29,14 +85,11 @@ class DatabaseManager(val dbname: String) {
       """.execute.apply()
     }
 
-  def dropTable(tableName: String): Unit = {
-    NamedDB(s"$dbname") localTx { implicit session =>
-      sql"""
-        DROP TABLE IF EXISTS ${SQLSyntax.createUnsafely(tableName)};
-      """.execute.apply()
-    }
-  }
-
+  /**
+   * Создание всех таблиц из БД.
+   * Поскольку при работе с Heroku мы не имеем возможности создавать
+   * БД целиком - дропаем все таблицы
+   */
   def createAllTables(): Unit = {
     NamedDB(s"$dbname") localTx { implicit session =>
       sql"""
@@ -170,18 +223,5 @@ class DatabaseManager(val dbname: String) {
       """.execute.apply()
     }
   }
-
-  def fillSkillTable(skills: Seq[SkillEntity]): Unit =
-    skills.foreach(skill => skillDao.insert(skill))
-
-  def fillAbilityTable(abilities: Seq[AbilityEntity]): Unit =
-    abilities.foreach(ability => abilityDao.insert(ability))
-
-  def fillKnowledgeTable(knowledge: Seq[KnowledgeEntity]): Unit =
-    knowledge.foreach(know => knowledgeDao.insert(know))
-
-  def fillCourseTable(courses: Seq[CourseEntity]): Unit =
-    courses.foreach(course => courseDao.insert(course))
-
 }
 

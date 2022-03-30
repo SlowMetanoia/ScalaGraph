@@ -1,9 +1,15 @@
 package Databases.Models.Domain
 
+import java.util.UUID
+
 /**
- * Маркерный трейт для моделей
+ * Трейт для моделей
  * */
-trait IModel
+trait IModel {
+  val id: UUID
+  val name: String
+}
+
 
 /**
  * Маркерный трейт для ЗУН'ов
