@@ -1,18 +1,17 @@
 package Databases.Experiment
 
-import scalikejdbc.config.DBs
 import scalikejdbc._
 
 import java.util.UUID
 
-case class Skill(id: Any, name: String)
+case class Skill(id: UUID, name: String)
 
 object Skill extends SQLSyntaxSupport[Skill] {
 
 
   def apply(s: ResultName[Skill])(rs: WrappedResultSet): Skill =
     new Skill(
-      id = rs.any(s.id),
+      id = UUID.fromString(rs.string(s.id)),
       name = rs.string(s.name))
 }
 
