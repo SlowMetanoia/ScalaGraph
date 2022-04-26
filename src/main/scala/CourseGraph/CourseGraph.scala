@@ -25,13 +25,13 @@ class CourseGraph( courses: Seq[ Course ] ) {
   val KSANum: Int = KSAMap.size
   
   def f( i: Int, j: Int ): Boolean = (i,j) match {
-    case (i,j) if i <  curseNum && j>=curseNum => courseMap(i).isOutput(KSAMap(j))
-    case (i,j) if i >= curseNum && j<curseNum  => courseMap(j).isInput(KSAMap(i))
+    case (i,j) if i <  curseNum && j >= curseNum  => courseMap(i).isOutput(KSAMap(j))
+    case (i,j) if i >= curseNum && j <  curseNum  => courseMap(j).isInput(KSAMap(i))
     //todo:rew
     case _ => throw new IndexOutOfBoundsException
   }
   
-  val courseGraph: BipartiteOrientedGraph = BipartiteOrientedGraph.graphFromSlices(KSANum + curseNum, KSANum, f)
+  def courseGraph: BipartiteOrientedGraph = BipartiteOrientedGraph.graphFromSlices(KSANum + curseNum, KSANum, f)
 }
 object CourseGraph extends App{
   import scalikejdbc.config.DBs
